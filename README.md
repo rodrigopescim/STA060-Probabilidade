@@ -1,6 +1,6 @@
 # STA060-Probabilidade
  
- Este repósitorio oara conter os códigos em R da página da disciplina
+ Este repósitorio foi desenvolvido para conter os códigos em R da página da disciplina
  STA060-Probabilidade do curso de Especialização em Estatística da UEL, 
  ministrada de forma remota, no primeiro semestre de 2020. 
  
