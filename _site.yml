@@ -1,0 +1,65 @@
+name: "Especialização em Estatística"
+output_dir: "."
+exclude: ["README.md"]
+output:
+  html_document:
+    theme: flatly
+    highlight: default
+    code_folding: hide
+    number_sections: false
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    includes:
+      in_header: analytics.html
+      after_body: footer.html
+navbar:
+  title: "STA060 - Probabilidade"
+  left:
+    - text: "Roteiro"
+      href: index.html
+    - text: "Aulas"
+      menu:
+      - text: "Teoria da Probabilidade"
+      - text: "Introdução à Probabilidade [html]"
+        href: Introd_proba.html
+      - text: "Definições de Probabilidades [html]"
+        href: calculo_proba.html
+      - text: "----------"
+      - text: "Variáveis Aleatórias"
+      - text: "Variáveis Aleatórias Discretas [html]"
+        href: variavel_aleatoria_discretas.html
+      - text: "Variáveis Aleatórias Contínuas [html]"
+        href: variavel_aleatoria_continuas.html
+      - text: "----------"
+      - text: "Principais Distribuições Discretas"
+      - text: "Distribuição Binomial [html]"
+        href: distribuicao_binomial.html
+      - text: "Distribuição de Poisson [html]"
+        href: distribuicao_poisson.html
+      - text: "----------"
+      - text: "Principais Distribuições Contínuas"
+      - text: "Distribuição Uniforme [html]"
+        href: distribuicao_uniforme.html
+      - text: "Distribuição Exponencial [html]"
+        href: distribuicao_exponencial.html  
+      - text: "Distribuição Normal [html]"
+        href: distribuicao_normal.html  
+      - text: "----------"  
+      - text: "Distribuições de Probabilidade no R"
+      - text: "Distribuição Binomial no R [html]"
+        href: distribuicao_binomial_no_R.html
+      - text: "Distribuição de Poisson no R [html]"
+        href: distribuicao_poisson_no_R.html
+      - text: "Distribuição de Normal no R [html]"
+        href: distribuicao_normal_no_R.html
+    - text: "Software Estatístico R"
+      href: recursos.html
+    - text: "Referências Bibliogáficas"
+      href: referencias.html
+  right:
+    - text: GitHub
+      icon: fa-github fa-lg
+      href: https://github.com/rodrigopescim

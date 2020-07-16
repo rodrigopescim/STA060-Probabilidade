@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Distribuição Normal</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-38898840-7', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">STA060 - Probabilidade</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Roteiro</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Aulas
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Teoria da Probabilidade</li>
+    <li>
+      <a href="Introd_proba.html">Introdução à Probabilidade [html]</a>
+    </li>
+    <li>
+      <a href="calculo_proba.html">Definições de Probabilidades [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Variáveis Aleatórias</li>
+    <li>
+      <a href="variavel_aleatoria_discretas.html">Variáveis Aleatórias Discretas [html]</a>
+    </li>
+    <li>
+      <a href="variavel_aleatoria_continuas.html">Variáveis Aleatórias Contínuas [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Discretas</li>
+    <li>
+      <a href="distribuicao_binomial.html">Distribuição Binomial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson.html">Distribuição de Poisson [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Contínuas</li>
+    <li>
+      <a href="distribuicao_uniforme.html">Distribuição Uniforme [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_exponencial.html">Distribuição Exponencial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal.html">Distribuição Normal [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Distribuições de Probabilidade no R</li>
+    <li>
+      <a href="distribuicao_binomial_no_R.html">Distribuição Binomial no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson_no_R.html">Distribuição de Poisson no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal_no_R.html">Distribuição de Normal no R [html]</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="recursos.html">Software Estatístico R</a>
+</li>
+<li>
+  <a href="referencias.html">Referências Bibliogáficas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/rodrigopescim">
+    <span class="fa fa-github fa-lg"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Distribuição Normal</h1>
+
+</div>
+
+
+<p> </p>
+<div id="introdução" class="section level2">
+<h2>Introdução</h2>
+<p>A <strong>distribuição normal</strong> é um dos modelos probabilísticos mais importantes, seja do ponto de vista prático ou teórico. Esse modelo de probabilidade possui um <strong>papel central na teoria de probabilidade</strong> e <a href="https://pt.wikipedia.org/wiki/Infer%C3%AAncia_estat%C3%ADstica">estatística inferencial</a> uma vez que representa o limite de qualquer distrbuição amostral da média como mostra o <a href="https://pt.wikipedia.org/wiki/Teorema_central_do_limite">teorema central do limite</a>. Isto significa que a média das variáveis aleatórias independentes de uma amostra aleatória se aproxima da distribuição normal conforme o tamanho da amostra <span class="math inline">\({\displaystyle n}\)</span> cresce.</p>
+<p>Um dos primeiros estudos relacionados com esse modelo de probabilidade foi em 1756 no trabalho <strong>The Doctrine of Chances</strong> puplicado por <a href="https://pt.wikipedia.org/wiki/Abraham_de_Moivre">Abraham de Moivre</a>, que observou <strong>a distribuição normal como o limite de uma distribuição binomial</strong>, o que originou um caso particular do teorema central do limite. Em seguida, <a href="https://pt.wikipedia.org/wiki/Pierre-Simon_Laplace">Pierre-Simon Laplace</a> obteve uma boa aproximação do erro entre as distribuições normal e binomial utilizando a <a href="https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_gama">função gama</a> de <a href="https://pt.wikipedia.org/wiki/Leonhard_Euler">Euler</a>. Porém, somente em 1809, o matemático alemão <a href="https://pt.wikipedia.org/wiki/Carl_Friedrich_Gauss">Carl Friedrich Gauss</a> observou que <strong>erros experimentais em medidas físicas</strong>, nesse caso na astronomia, poderia estar associado com à curva (normal) da função densidade da distribuição normal.</p>
+<p>Por fim, no século XIX, <a href="https://pt.wikipedia.org/wiki/Henri_Poincar%C3%A9">Henri Poincaré</a> denotou esse modelo probabilístico como <strong>distribuição normal</strong>. Porém, a distribuição normal também é conhecida como <strong>distribuição de Laplace-Gauss</strong> ou <strong>distribuição Gaussiana</strong>.</p>
+<p> </p>
+</div>
+<div id="distribuição-normal" class="section level2">
+<h2>Distribuição Normal</h2>
+<p>Diz-se que uma variável aleatória <span class="math inline">\(X\)</span> segue distribuição normal (ou Gaussiana) se sua função densidade é dada por</p>
+<p><span class="math display">\[
+f(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left[-\frac{1}{2} \left( \frac{x -
+            \mu}{\sigma}\right)^2\right], \quad -\infty &lt; x &lt; \infty
+\]</span> em que <span class="math inline">\(\mu \in \mathbb{R}\)</span> é o parâmetro de locação e <span class="math inline">\(\sigma &gt; 0\)</span> é o parâmetro de escala.</p>
+<p> </p>
+<p><strong>Esperança e Variância</strong>:  <span class="math inline">\(\displaystyle \mbox{E}(X) = \mu \quad \mbox{e} \quad \mbox{Var}(X) = \sigma^2\)</span></p>
+<p> </p>
+<p><strong>Notação:</strong>  <span class="math inline">\(X \sim \text{N}(\mu, \sigma^2)\)</span>.</p>
+<p> </p>
+<p>Graficamente, temos</p>
+<pre class="r"><code>par(mfrow=c(2,2), mar=c(3,4,2,1), mgp=c(2,0.5,0), las=1)
+plot(seq(10, 90, length=100), type = &quot;l&quot;, xlab = &quot;X&quot;, ylab = &quot;f(x)&quot;,
+     y = dnorm(x = seq(10, 90, length=100), mean = 50, sd = 5),
+     main = expression(list(mu == 50, sigma^2 == 25)))
+plot(seq(10, 90, length=100), type = &quot;l&quot;, xlab = &quot;X&quot;, ylab = &quot;f(x)&quot;,
+     y = dnorm(x = seq(10, 90, length=100), mean = 50, sd = 10),
+     main = expression(list(mu == 50, sigma^2 == 100)))
+plot(seq(70, 130, length=100), type = &quot;l&quot;, xlab = &quot;X&quot;, ylab = &quot;f(x)&quot;,
+     y = dnorm(x = seq(70, 130, length=100), mean = 100, sd = 5),
+     main = expression(list(mu == 100, sigma^2 == 25)))
+plot(seq(170, 230, length=100), type = &quot;l&quot;, xlab = &quot;X&quot;, ylab = &quot;f(x)&quot;,
+     y = dnorm(x = seq(170, 230, length=100), mean = 200, sd = 5),
+     main = expression(list(mu == 200, sigma^2 == 25)))</code></pre>
+<p><img src="figures/normal,%20-1.png" width="99%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))</code></pre>
+</div>
+<div id="propriedades-da-curva-normal" class="section level2">
+<h2>Propriedades da Curva Normal</h2>
+<ul>
+<li>É <strong>simétrica</strong> em relação à <span class="math inline">\(\mu\)</span></li>
+<li>O ponto de máximo (moda) de <span class="math inline">\(f(x)\)</span> é <span class="math inline">\(x=\mu\)</span></li>
+<li>Os pontos de inflexão da função densidade são <span class="math inline">\(\mu-\sigma\)</span> e <span class="math inline">\(\mu+\sigma\)</span></li>
+<li>A curva é <strong>assintótica</strong> em relação ao eixo <span class="math inline">\(x\)</span></li>
+</ul>
+<p>Para qualquer variável aleatória <span class="math inline">\(X\)</span> que segue distribuição normal, valem as seguintes relações</p>
+<p> </p>
+<p><span class="math display">\[\begin{align*}
+&amp;P[X &gt; \mu] = P[X &lt; \mu] \\\\
+&amp;P[\mu - \sigma &lt; X &lt; \mu + \sigma] \approxeq 0,683 \\\\
+&amp;P[\mu - 2\sigma &lt; X &lt; \mu + 2\sigma] \approxeq 0,954 \\\\
+&amp;P[\mu - 3\sigma &lt; X &lt; \mu + 3\sigma] \approxeq 0,997
+\end{align*}\]</span></p>
+<pre class="r"><code>curve(dnorm, from = -4, to = 4, axes = FALSE,
+      xlab = &quot;x&quot;, ylab = &quot;f(x)&quot;, yaxs = &quot;i&quot;,
+      ylim = c(0, 0.5))
+axis(1, at = c(-3, -2, -1, 0, 1, 2, 3),
+     labels = c(expression(mu - 3 %.% sigma),
+                expression(mu - 2 %.% sigma), expression(mu - sigma),
+                expression(mu),
+                expression(mu + sigma), expression(mu + 2 %.% sigma),
+                expression(mu + 3 %.% sigma)))
+cord.x &lt;- c(-3, seq(-3, 3, 0.01), 3)
+cord.y &lt;- c(0, dnorm(seq(-3, 3, 0.01)), 0)
+polygon(x = cord.x, y = cord.y, col = &quot;orange&quot;, border = NA)
+segments(x0 = 0, y0 = 0, x1 = 0, y1 = dnorm(0))
+segments(x0 = 1, y0 = 0, x1 = 1, y1 = dnorm(1), lty = 2)
+segments(x0 = 2, y0 = 0, x1 = 2, y1 = dnorm(2), lty = 2)
+segments(x0 = 3, y0 = 0, x1 = 3, y1 = dnorm(3), lty = 2)
+segments(x0 = -1, y0 = 0, x1 = -1, y1 = dnorm(-1), lty = 2)
+segments(x0 = -2, y0 = 0, x1 = -2, y1 = dnorm(-2), lty = 2)
+segments(x0 = -3, y0 = 0, x1 = -3, y1 = dnorm(-3), lty = 2)
+text(x = 0.5, y = 0.15, labels = round(pnorm(1) - pnorm(0), 2))
+text(x = -0.5, y = 0.15, labels = round(pnorm(0) - pnorm(-1), 2))
+text(x = 1.5, y = 0.05, labels = round(pnorm(2) - pnorm(1), 2))
+text(x = -1.5, y = 0.05, labels = round(pnorm(-1) - pnorm(-2), 2))
+text(x = 1.5, y = 0.05, labels = round(pnorm(2) - pnorm(1), 2))
+text(x = -1.5, y = 0.05, labels = round(pnorm(-1) - pnorm(-2), 2))
+text(x = 2.35, y = 0.01, labels = round(pnorm(3) - pnorm(2), 2))
+text(x = -2.35, y = 0.01, labels = round(pnorm(-2) - pnorm(-3), 2))
+segments(x0 = -1, y0 = 0.41, x1 = 1, y1 = 0.41)
+text(x = 0, y = 0.41,
+     labels = paste0(round((pnorm(1) - pnorm(-1))*100, 1), &quot;%&quot;),
+     pos = 3, offset = 0.1)
+segments(x0 = -2, y0 = 0.44, x1 = 2, y1 = 0.44)
+text(x = 0, y = 0.44,
+     labels = paste0(round((pnorm(2) - pnorm(-2))*100, 1), &quot;%&quot;),
+     pos = 3, offset = 0.1)
+segments(x0 = -3, y0 = 0.47, x1 = 3, y1 = 0.47)
+text(x = 0, y = 0.47,
+     labels = paste0(round((pnorm(3) - pnorm(-3))*100, 1), &quot;%&quot;),
+     pos = 3, offset = 0.1)
+box()</code></pre>
+<p><img src="figures/normal2-1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><strong>Exemplo 1:</strong></p>
+<p> </p>
+<p>Seja <span class="math inline">\(X \sim \mbox{N}(10,4)\)</span>. Calcule</p>
+<p> </p>
+<ol style="list-style-type: lower-alpha">
+<li> <span class="math inline">\(P(8 &lt; X &lt; 12)\)</span></li>
+</ol>
+<p> </p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li> <span class="math inline">\(P(6 &lt; X &lt; 14)\)</span></li>
+</ol>
+<p> </p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li> <span class="math inline">\(P(4 &lt; X &lt; 16)\)</span></li>
+</ol>
+<p> </p>
+<p><strong>Solução:</strong></p>
+<p> </p>
+<p>Como  <span class="math inline">\(\mu = 10\)</span>  e  <span class="math inline">\(\sigma = 2\)</span>, então utilizando a <strong>propriedade da curva normal</strong> acima, encontra-se que</p>
+<p> </p>
+<ol style="list-style-type: lower-alpha">
+<li> <span class="math inline">\(P(8 &lt; X &lt; 12) = P(\mu - \sigma &lt; X &lt; \mu + \sigma) = 0.6827\)</span></li>
+</ol>
+<p> </p>
+<p>Graficamente, temos</p>
+<pre class="r"><code>x   = seq(0,20, by =0.01)
+media = 10
+var   = 4
+# função de densidade
+dx  = dnorm(x, mean = media, sd = sqrt(var))
+#plot da função de densidade
+plot(x,dx,type = &quot;l&quot;, col = &quot;blue&quot;, ylab = bquote(f[X]~(x)~~&quot;densidades&quot;), xlab = &quot;x&quot;, main =  bquote(&quot;N&quot;~(mu==.(media)~&quot;,&quot;~sigma^2 == .(var))))
+# poligono para representar a área sob a curva
+a = 8 # Limite inferior
+b = 12 # Limite superior
+da = dnorm(a,mean = media, sd = sqrt(var))   # Densidade no Limite inferior crítico
+db = dnorm(b,mean = media, sd = sqrt(var))   # Densidade no Limite superior crítico
+
+polygon(x = c(a, a  , x[a&lt;x &amp; x&lt;b], b), # X = conjunto dos valores de a até b
+        y = c(0, da , dx[a&lt;x &amp; x&lt;b], 0),          # Y = conjunto das Density de a até b
+        col = &quot;red&quot;,
+        density = c(20),
+        angle = c(-45))
+
+# Legendas
+prob = pnorm(b,mean = media, sd = sqrt(var)) - pnorm(a,mean = media, sd = sqrt(var)) 
+legenda &lt;- list( bquote( &quot;Probabilidade =&quot; ~ .(round(prob,4)) )  )
+mtext(side = 3, do.call(expression, legenda), line=-2:-2, adj=1, col=c(&quot;red&quot;))
+
+# adicionado valores no eixo x
+m = Map(axis, side=1, at = round(c(a,b),2),
+    col.axis = c(&quot;red&quot; , &quot;red&quot;),
+    col.ticks = c(&quot;red&quot;, &quot;red&quot;),
+    lwd=0, las=1,
+    lwd.ticks = 2)</code></pre>
+<p><img src="figures/normal3-1.png" width="672" style="display: block; margin: auto;" />  </p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li> <span class="math inline">\(P(6 &lt; X &lt; 14) = P(\mu - 2\sigma &lt; X &lt; \mu + 2\sigma) = 0.9545\)</span></li>
+</ol>
+<p> </p>
+<p>Graficamente, temos</p>
+<p> </p>
+<pre class="r"><code>x   = seq(0,20, by =0.01)
+media = 10
+var   = 4
+# função de densidade
+dx  = dnorm(x, mean = media, sd = sqrt(var))
+#plot da função de densidade
+plot(x,dx,type = &quot;l&quot;, col = &quot;blue&quot;, ylab = bquote(f[X]~(x)~~&quot;densidades&quot;), xlab = &quot;x&quot;, main =  bquote(&quot;N&quot;~(mu==.(media)~&quot;,&quot;~sigma^2 == .(var))))
+# poligono para representar a área sob a curva
+a = 6 # Limite inferior
+b = 14 # Limite superior
+da = dnorm(a,mean = media, sd = sqrt(var))   # Densidade no Limite inferior crítico
+db = dnorm(b,mean = media, sd = sqrt(var))   # Densidade no Limite superior crítico
+
+polygon(x = c(a, a  , x[a&lt;x &amp; x&lt;b], b), # X = conjunto dos valores de a até b
+        y = c(0, da , dx[a&lt;x &amp; x&lt;b], 0),          # Y = conjunto das Density de a até b
+        col = &quot;red&quot;,
+        density = c(20),
+        angle = c(-45))
+
+# Legendas
+prob = pnorm(b,mean = media, sd = sqrt(var)) - pnorm(a,mean = media, sd = sqrt(var)) 
+legenda &lt;- list( bquote( &quot;Probabilidade =&quot; ~ .(round(prob,4)) )  )
+mtext(side = 3, do.call(expression, legenda), line=-2:-2, adj=1, col=c(&quot;red&quot;))
+
+# adicionado valores no eixo x
+m = Map(axis, side=1, at = round(c(a,b),2),
+    col.axis = c(&quot;red&quot; , &quot;red&quot;),
+    col.ticks = c(&quot;red&quot;, &quot;red&quot;),
+    lwd=0, las=1,
+    lwd.ticks = 2)</code></pre>
+<p><img src="figures/normal4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li> <span class="math inline">\(P(4 &lt; X &lt; 16) = P(\mu - 3\sigma &lt; X &lt; \mu + 3\sigma) = 0.9973\)</span></li>
+</ol>
+<p> </p>
+<p>Graficamente, temos</p>
+<p> </p>
+<pre class="r"><code>x   = seq(0,20, by =0.01)
+media = 10
+var   = 4
+# função de densidade
+dx  = dnorm(x, mean = media, sd = sqrt(var))
+#plot da função de densidade
+plot(x,dx,type = &quot;l&quot;, col = &quot;blue&quot;, ylab = bquote(f[X]~(x)~~&quot;densidades&quot;), xlab = &quot;x&quot;, main =  bquote(&quot;N&quot;~(mu==.(media)~&quot;,&quot;~sigma^2 == .(var))))
+# poligono para representar a área sob a curva
+a = 4 # Limite inferior
+b = 16 # Limite superior
+da = dnorm(a,mean = media, sd = sqrt(var))   # Densidade no Limite inferior crítico
+db = dnorm(b,mean = media, sd = sqrt(var))   # Densidade no Limite superior crítico
+
+polygon(x = c(a, a  , x[a&lt;x &amp; x&lt;b], b), # X = conjunto dos valores de a até b
+        y = c(0, da , dx[a&lt;x &amp; x&lt;b], 0),          # Y = conjunto das Density de a até b
+        col = &quot;red&quot;,
+        density = c(20),
+        angle = c(-45))
+
+# Legendas
+prob = pnorm(b,mean = media, sd = sqrt(var)) - pnorm(a,mean = media, sd = sqrt(var)) 
+legenda &lt;- list( bquote( &quot;Probabilidade =&quot; ~ .(round(prob,4)) )  )
+mtext(side = 3, do.call(expression, legenda), line=-2:-2, adj=1, col=c(&quot;red&quot;))
+
+# adicionado valores no eixo x
+m = Map(axis, side=1, at = round(c(a,b),2),
+    col.axis = c(&quot;red&quot; , &quot;red&quot;),
+    col.ticks = c(&quot;red&quot;, &quot;red&quot;),
+    lwd=0, las=1,
+    lwd.ticks = 2)</code></pre>
+<p><img src="figures/normal5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="como-calcular-probabilidades-no-modelo-normal" class="section level2">
+<h2>Como calcular probabilidades no modelo normal?</h2>
+<p> </p>
+<p><strong>Exemplo 2:</strong></p>
+<p> </p>
+<p>Um bom indicador do nível de intoxicação por benzeno é a quantidade de fenol encontrada na urina. A quantidade de fenol na urina de moradores de certa região segue, aproximadamente, uma distribuição normal com média <span class="math inline">\(6\)</span> mg/l e desvio-padrão <span class="math inline">\(2\)</span> mg/l. Uma pessoa é considerada “atípica” se a quantidade de fenol em sua urina for superior a <span class="math inline">\(9\)</span> mg/l ou inferior a <span class="math inline">\(3\)</span> mg/l.</p>
+<p><strong>Questão:</strong></p>
+<p>Qual é a probabilidade de ser encontrado um indivíduo “atípico”?</p>
+<p> </p>
+<p><strong>Solução:</strong></p>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória que representa <strong>quantidade de fenol encontrada na urina de um indivíduo</strong> de uma certa região.</p>
+<p>Observa-se que <span class="math display">\[
+X \sim N(6,4) \implies
+\begin{cases}
+  \mu = 6 \ \mbox{mg/l} \\\\
+   \sigma = 2 \ \mbox{mg/l}
+\end{cases}
+\]</span> Além disso, temos que</p>
+<p><span class="math display">\[
+\text{Indivíduo  atípico} \implies \text{Indivíduo} \quad X &lt; 3 \quad \text{ou} \quad X &gt; 9
+\]</span></p>
+<p>Então,</p>
+<p><span class="math display">\[
+P(\text{Indivíduo  atípico}) = P(X &lt; 3 \quad \text{ou} \quad X &gt; 9) = P(X &lt; 3) + P(X &gt; 9)
+\]</span></p>
+<p>Assim, temos que calcular as duas probabilidades acima para solucionar o problema.</p>
+<p><span class="math display">\[
+P(X &gt; 9) \ = \ \int_{9}^{+\infty}\frac{1}{2\sqrt{2\pi}} \ \exp\left[-\frac{1}{2}\left(\frac{x -6}{2}\right)^2\right] dx \ = \ ?
+\]</span></p>
+<p>Observa-se que <strong>a integral acima não possui solução exata</strong>, pois a <strong>função densidade da distribuição normal não admite uma função primitiva</strong>, isto ém não existe uma função  <span class="math inline">\(F\)</span>  tal que  <span class="math inline">\(\displaystyle F^{\prime}(x) = f(x)\)</span>.</p>
+<p>Dessa forma, como calcular esta probabilidade, considerando que a variável de interesse é representada pela distribuição normal?</p>
+<p>Seja <span class="math inline">\(X \sim \mbox{N}(\mu,\sigma^2)\)</span> e desejamos calcular a probabilidade da variável aleatória <span class="math inline">\(X\)</span> pertencer a um intervalo <span class="math inline">\((a,b) \subset \mathbb{R}\)</span>.</p>
+<p>Então,</p>
+<p><span class="math display">\[
+    P[a &lt; X &lt; b] = \int_{a}^{b} f(x) \ dx= \int_{a}^{b}\frac{1}{\sigma\sqrt{2\pi}} \ \exp\left[-\frac{1}{2}\left(\frac{x -\mu}{\sigma}\right)^2\right] dx
+\]</span></p>
+<p>Observa-se que uma possível solução para integral acima é por meio da utilização de <strong>métodos númericos</strong>.</p>
+<p>Uma forma alternativa para calcular <span class="math inline">\(P[a &lt; X &lt; b]\)</span> quando <span class="math inline">\(X \sim N(\mu,\sigma^{2})\)</span> é utilizar uma simples transformação. Então,</p>
+<p><span class="math display">\[
+\begin{eqnarray*}
+                Z = \frac{X - \mu}{\sigma}\quad\mbox{então}\quad Z \sim N(0,1)
+\end{eqnarray*}
+\]</span> em que, <span class="math inline">\(Z\)</span> segue distribuição normal com <strong>média</strong> <span class="math inline">\(\mu = 0\)</span> e <strong>variância</strong> <span class="math inline">\(\sigma^2 = 1\)</span>.  A variável aleatória <span class="math inline">\(Z\)</span> também é conhecida como <strong>distribuição normal padrão</strong> ou <strong>normal reduzida</strong>.</p>
+<p><strong>Observação 1:</strong></p>
+<p>Observa-se que a grande <strong>vantagem</strong> de realizar essa transformação, é poder <strong>construir uma única tabela com as probabilidades aproximadas de <span class="math inline">\(Z\)</span></strong>, ao invés de uma tabela para cada par <span class="math inline">\((\mu,\sigma^2)\)</span>.</p>
+<p>Assim, se <span class="math inline">\(Z \sim N(0,1)\)</span>, então sua função densidade é dada por</p>
+<p><span class="math display">\[
+\begin{eqnarray*}
+            f(z)=\frac{1}{\sqrt{2\pi}}\,\,\exp\left[-\frac{z^{2}}{2}\right], \quad -\infty &lt; z &lt; \infty
+\end{eqnarray*}
+\]</span> Para se obter a probabilidade de <span class="math inline">\(X\)</span> estar entre <span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span>, temos que</p>
+<p><span class="math display">\[
+\begin{eqnarray*}
+            P[a &lt; X &lt; b] \ &amp;=&amp; \ P\left[\frac{a-\mu}{\sigma} &lt; \frac{X-\mu}{\sigma} &lt; \frac{b-\mu}{\sigma}\right] \\\\&amp;=&amp; P\left[\frac{a-\mu}{\sigma} &lt; Z &lt; \frac{b-\mu}{\sigma}\right]
+            \\\\ \ &amp;=&amp; \ P\left[z_{1} &lt; Z &lt; z_{2}\right]
+            \\\\ \ &amp;=&amp;  \ \int_{z_{1}}^{ z_{2}} \frac{1}{\sqrt{2\pi}}\,\,\exp\left[-\frac{z^{2}}{2}\right] \ dz.
+        \end{eqnarray*}
+\]</span></p>
+<p><strong>Observação 2:</strong></p>
+<p>Observa-se que realizando a transformação <span class="math inline">\(Z\)</span>, <strong>a probabilidade não foi alterada!</strong> Por exemplo, se <span class="math inline">\(X \sim \mbox{N}(100,10)\)</span> então realizando a transformação em <span class="math inline">\(Z\)</span>, temos que <span class="math inline">\(Z \sim \mbox{N}(0,1)\)</span>. Graficamente, pode-se observar que</p>
+<pre class="r"><code>par(mfrow=c(1,2))
+media = 100       # média
+var   = 10         # variância
+li    = media - 4.5*sqrt(var)
+ls    = media + 4.5*sqrt(var)
+x     = seq(li,ls, by =0.01) # limites de x e plot
+# função de densidade
+dx  = dnorm(x, mean = media, sd = sqrt(var))
+#plot da função de densidade
+plot(x,dx,type = &quot;l&quot;, col = &quot;blue&quot;, ylab = bquote(f[X]~(x)~~&quot;densidades&quot;), xlab = &quot;x&quot;, main =  bquote(&quot;X~ N&quot;~(mu==.(media)~&quot;,&quot;~sigma^2 == .(var))))
+
+# transformando em Z
+z = (x-media)/sqrt(var)
+dz  = dnorm(z, mean = 0, sd = 1)
+plot(z,dz,type = &quot;l&quot;, col = &quot;red&quot;, ylab = bquote(f[Z]~(z)~~&quot;densidades&quot;), xlab = &quot;z&quot;, main =  bquote(&quot;Z~ N&quot;~(mu==0~&quot;,&quot;~sigma^2 == 1)))</code></pre>
+<p><img src="figures/normal6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>A partir disso, podemos construir uma tabela chamada de <a href="Tab_Normal_Acum_50pc.pdf">Tabela da distribuição normal padrão</a>. Assim uma vez que a variável aleatória <span class="math inline">\(X\)</span> é padronizada em <span class="math inline">\(Z\)</span>, <strong>pode-se calcular a probabilidade (área) para qualquer valor de <span class="math inline">\(X\)</span> entre dois pontos sob a curva normal</strong> diretamente com o uso de uma tabela da distribuição normal padrão.</p>
+<p> </p>
+<p><strong>Pergunta:</strong> Como utilizar essa tabela? Qual é o significado dos valores tabelados?</p>
+<p>Como</p>
+<p><span class="math display">\[
+P[a &lt; X &lt; b] \ = \ P\left[\frac{a-\mu}{\sigma} &lt; \frac{X-\mu}{\sigma} &lt; \frac{b-\mu}{\sigma}\right] \ = \ P[z_{1} &lt; Z &lt; z_{2}],
+\]</span> então calcule <span class="math inline">\(P[z_{1} &lt; Z &lt; z_{2}]\)</span> para <span class="math inline">\(z_1 = 0\)</span> e <span class="math inline">\(z_2 = 0,32\)</span>.</p>
+<p>Assim, utilizando a tabela da distribuição normal padrão, temos</p>
+<p><span class="math display">\[
+P[z_{1} &lt; Z &lt; z_{2}] = P[0 &lt; Z &lt; 0,32] = 0.1255, \quad \text{em que} \quad z_{2}\ \  = \underbrace{0}_{\text{Coluna da Tabela}}, \overbrace{32}_{\text{Linha da Tabela}}
+\]</span></p>
+<p>Graficamente, temos</p>
+<pre class="r"><code>x   = seq(-3,3, by =0.01)
+media = 0
+var   = 1
+# função de densidade
+dx  = dnorm(x, mean = media, sd = sqrt(var))
+#plot da função de densidade
+plot(x,dx,type = &quot;l&quot;, col = &quot;blue&quot;, ylab = bquote(f[Z]~(z)~~&quot;densidades&quot;), xlab = &quot;z&quot;, main =  bquote(&quot;N&quot;~(mu==.(media)~&quot;,&quot;~sigma^2 == .(var))))
+# poligono para representar a área sob a curva
+a = 0# Limite inferior
+b = 0.32 # Limite superior
+da = dnorm(a,mean = media, sd = sqrt(var))   # Densidade no Limite inferior crítico
+db = dnorm(b,mean = media, sd = sqrt(var))   # Densidade no Limite superior crítico
+
+polygon(x = c(a, a  , x[a&lt;x &amp; x&lt;b], b), # X = conjunto dos valores de a até b
+        y = c(0, da , dx[a&lt;x &amp; x&lt;b], 0),          # Y = conjunto das Density de a até b
+        col = &quot;red&quot;,
+        density = c(20),
+        angle = c(-45))
+
+# Legendas
+prob = pnorm(b,mean = media, sd = sqrt(var)) - pnorm(a,mean = media, sd = sqrt(var)) 
+legenda &lt;- list( bquote( &quot;Probabilidade =&quot; ~ .(round(prob,4)) )  )
+mtext(side = 3, do.call(expression, legenda), line=-2:-2, adj=1, col=c(&quot;red&quot;))
+
+# adicionado valores no eixo x
+m = Map(axis, side=1, at = round(c(a,b),2),
+    col.axis = c(&quot;red&quot; , &quot;red&quot;),
+    col.ticks = c(&quot;red&quot;, &quot;red&quot;),
+    lwd=0, las=1,
+    lwd.ticks = 2)</code></pre>
+<p><img src="figures/normal7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
+<p>Calcule as seguintes probabilidades <span class="math inline">\(P(Z &lt; -2,33)\)</span> e <span class="math inline">\(P(Z &gt; 2,33)\)</span>.</p>
+<p> </p>
+<p>Retornando ao <strong>EXemplo 2</strong>, sobre a <strong>quantidade de fenol</strong>, temos que</p>
+<p><span class="math display">\[
+P(X &gt; 9) \ = \ P\left(\frac{X -\mu}{\sigma} &gt; \frac{9 -\mu}{\sigma}\right) \ = \ P\left(Z &gt; \frac{9 -\mu}{\sigma}\right) \ = \  P\left(Z &gt; \frac{9 -6}{2}\right) = P(Z &gt; 1,5)
+\]</span></p>
+<p>Esboçando o gráfico de <span class="math inline">\(Z\)</span>, temos que</p>
+<pre class="r"><code>x   = seq(-4,4, by =0.01)
+media = 0
+var   = 1
+# função de densidade
+dx  = dnorm(x, mean = media, sd = sqrt(var))
+#plot da função de densidade
+plot(x,dx,type = &quot;l&quot;, col = &quot;blue&quot;, ylab = bquote(f[Z]~(z)~~&quot;densidades&quot;), xlab = &quot;z&quot;, main =  bquote(&quot;N&quot;~(mu==.(media)~&quot;,&quot;~sigma^2 == .(var))))
+# poligono para representar a área sob a curva
+a = 1.5# Limite inferior
+b = 4 # Limite superior
+da = dnorm(a,mean = media, sd = sqrt(var))   # Densidade no Limite inferior crítico
+db = dnorm(b,mean = media, sd = sqrt(var))   # Densidade no Limite superior crítico
+
+polygon(x = c(a, a  , x[a&lt;x &amp; x&lt;b], b), # X = conjunto dos valores de a até b
+        y = c(0, da , dx[a&lt;x &amp; x&lt;b], 0),          # Y = conjunto das Density de a até b
+        col = &quot;red&quot;,
+        density = c(20),
+        angle = c(-45))
+
+# Legendas
+prob = pnorm(b,mean = media, sd = sqrt(var)) - pnorm(a,mean = media, sd = sqrt(var)) 
+legenda &lt;- list( bquote( &quot;Probabilidade =&quot; ~ .(round(prob,4)) )  )
+mtext(side = 3, do.call(expression, legenda), line=-2:-2, adj=1, col=c(&quot;red&quot;))
+
+# adicionado valores no eixo x
+m = Map(axis, side=1, at = round(c(a,b),2),
+    col.axis = c(&quot;red&quot; , &quot;red&quot;),
+    col.ticks = c(&quot;red&quot;, &quot;red&quot;),
+    lwd=0, las=1,
+    lwd.ticks = 2)</code></pre>
+<p><img src="figures/normal8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Observa-se que</p>
+<p><span class="math display">\[
+P(Z &gt; 1,5) \ = \ 0,5 - P(0 &lt; Z &lt; 1.5) \ =\  0,5 \ \ - \underbrace{0,4332}_{\text{Valor da Tabela}} \ = \ \ 0.0668
+\]</span></p>
+<p>Para determinar a probabilidade de um indivíduo atípico numa certa região, vamos calcular a probabilidade <span class="math inline">\(P(X &lt; 3)\)</span>, isto é</p>
+<p><span class="math display">\[
+P(X &lt; 3) \ = \ P\left(\frac{X -\mu}{\sigma} &lt; \frac{3 -\mu}{\sigma}\right) \ = \ P\left(Z &lt; \frac{3 -\mu}{\sigma}\right) \ = \  P(Z &lt; - 1,5)
+\]</span> Esboçando o gráfico de <span class="math inline">\(Z\)</span> neste caso, temos</p>
+<pre class="r"><code>x   = seq(-4,4, by =0.01)
+media = 0
+var   = 1
+# função de densidade
+dx  = dnorm(x, mean = media, sd = sqrt(var))
+#plot da função de densidade
+plot(x,dx,type = &quot;l&quot;, col = &quot;blue&quot;, ylab = bquote(f[Z]~(z)~~&quot;densidades&quot;), xlab = &quot;z&quot;, main =  bquote(&quot;N&quot;~(mu==.(media)~&quot;,&quot;~sigma^2 == .(var))))
+# poligono para representar a área sob a curva
+a = -4# Limite inferior
+b = - 1.5 # Limite superior
+da = dnorm(a,mean = media, sd = sqrt(var))   # Densidade no Limite inferior crítico
+db = dnorm(b,mean = media, sd = sqrt(var))   # Densidade no Limite superior crítico
+
+polygon(x = c(a, a  , x[a&lt;x &amp; x&lt;b], b), # X = conjunto dos valores de a até b
+        y = c(0, da , dx[a&lt;x &amp; x&lt;b], 0),          # Y = conjunto das Density de a até b
+        col = &quot;red&quot;,
+        density = c(20),
+        angle = c(-45))
+
+# Legendas
+prob = pnorm(b,mean = media, sd = sqrt(var)) - pnorm(a,mean = media, sd = sqrt(var)) 
+legenda &lt;- list( bquote( &quot;Probabilidade =&quot; ~ .(round(prob,4)) )  )
+mtext(side = 3, do.call(expression, legenda), line=-2:-2, adj=1, col=c(&quot;red&quot;))
+
+# adicionado valores no eixo x
+m = Map(axis, side=1, at = round(c(a,b),2),
+    col.axis = c(&quot;red&quot; , &quot;red&quot;),
+    col.ticks = c(&quot;red&quot;, &quot;red&quot;),
+    lwd=0, las=1,
+    lwd.ticks = 2)</code></pre>
+<p><img src="figures/normal9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Observa-se que <span class="math inline">\(P(Z &lt; -1,5) = P(Z &gt; 1,5) = 0,0668\)</span>, pois as <strong>áreas (probabilidades) dos dois gráficos anteriores são iguais</strong>. Isso se deve ao fato da <strong>propriedade de simetria</strong> em torno da média (<span class="math inline">\(\mu = 0\)</span>) da distribuição normal.</p>
+<p>Portanto,</p>
+<p><span class="math display">\[
+P(\text{Indivíduo  atípico})  = P(X &lt; 3) + P(X &gt; 9) = 0,1336.
+\]</span>  </p>
+</div>
+<div id="exercícios" class="section level2">
+<h2>Exercícios</h2>
+<p> </p>
+<p>1) Calcule as probabilidades (áreas) a partir da curva normal:</p>
+<p>a) <span class="math inline">\(P[0 &lt; Z &lt; 1,2]\)</span></p>
+<p>b) <span class="math inline">\(P[-0,68 &lt; Z &lt; 0]\)</span></p>
+<p>c) <span class="math inline">\(P[2,0 &lt; Z &lt; 2,5]\)</span></p>
+<p>d) <span class="math inline">\(P[-2,61 &lt; Z &lt; 2,43]\)</span></p>
+<p>e) <span class="math inline">\(P[Z &gt; - 1,63]\)</span></p>
+<p> </p>
+<p>2) As alturas de mulheres têm distribuição aproximadamente normal, <span class="math inline">\(N(64,5 , (2,5)^{2})\)</span>. Qual é o percentual de mulheres que possuem altura até 67 polegadas?</p>
+<p> </p>
+<p>3) Se <span class="math inline">\(X\)</span> é uma variável aleatória <span class="math inline">\(N(95,56.25)\)</span>, determinar  <span class="math inline">\(b\)</span>  tal que</p>
+<p>a) <span class="math inline">\(P(X &gt; b) = 0,9750\)</span></p>
+<p>b) <span class="math inline">\(P(X &lt; b) = 0,3707\)</span></p>
+<p> </p>
+<p>4) A vida de um semicondutor a laser, a uma potência constante, segue um modelo normal com média de 7000 horas e desvio-padrão de 600 horas.</p>
+<p>a) Qual a probabilidade do laser falhar antes de completar 5000 horas?</p>
+<p>b) Qual deve ser o tempo observado <span class="math inline">\(t\)</span> (em horas) de tal forma que a chance de funcionamento dos semicondutores a laser que excedem <span class="math inline">\(t\)</span> é 95%?</p>
+<p><br />
+</p>
+<p>5) Pacientes hospitalizados por COVID-19 são submetidos a um tratamento intensivo cujo tempo de cura da doença foi modelado por uma distribuição normal com média de internação de <span class="math inline">\(15\)</span> dias e desvio padrão igual a <span class="math inline">\(2\)</span> dias.</p>
+<p>a) Calcule a proporção de pacientes que demorarrão mais de <span class="math inline">\(17\)</span> dias para se recuperar do COVID-19.</p>
+<p>b) Calcule a probabilidade um paciente selecionado ao acaso demorar menos de <span class="math inline">\(20\)</span> dias para se recuperar.</p>
+<p>c)  Qual o tempo máximo necessário para a recuperação de 25% dos pacientes?</p>
+<p>d)  Se 100 pacientes forem selecionados ao acaso, qual seria o número esperado de doentes curados em menos de 11 dias?</p>
+</div>
+<div id="aproximação-binomial-pela-normal" class="section level2">
+<h2>Aproximação Binomial pela Normal</h2>
+<p>No início do século XVIII, De Moivre obteve um resultado de grande importância na teoria da probabilidade. Ele observou que <strong>a distribuição das médias amostrais retiradas de um população qualquer aproxima-se para a distribuição normal a medida que o tamanho da amostra aumenta</strong>. De Moivre observou que a aproximação para o modelo normal dependia da natureza da variável aleatória em estudo de uma certa população. Esse foi o início do resultado que ficou conhecido como <strong>teorema central do limite</strong> (TCL) e uma das melhores aproximações pela normal que o matemático francês obteve foi para uma variável aleatória que segue distribuição binomial.</p>
+<p>Vamos supor que estamos interessados em estudar <span class="math inline">\(n = 200\)</span> repetições independentes do experimento de Bernouli, em que a probabilidade de sucesso é representada por <span class="math inline">\(p = 0,5\)</span>. Considere agora que a variável aleatória de interesse <span class="math inline">\(X\)</span> é o número total de sucessos nas <span class="math inline">\(n\)</span> repetições. Como podemos calcular <span class="math inline">\(P(X = 60)\)</span>?</p>
+<p>Observa-se que <span class="math inline">\(X \sim \text{binomial}(n = 200, p = 0,5)\)</span>. Então,</p>
+<p><span class="math display">\[
+P(X = 60) = {200 \choose 60}\,(0,5)^{60}\,(0,5)^{140}
+\]</span> Observa-se que somente a combinação <span class="math inline">\({200 \choose 60}\)</span> é igual a <span class="math inline">\(7.040505 \times 10^{51}\)</span>. Evidentemente que nos dias hoje pode-se calcular essa combinação sem dificuldades com o auxílio de um computador. No R, temos que</p>
+<pre class="r"><code>choose(200,60)
+# [1] 7.040505e+51</code></pre>
+<p>Porém, sem a utilização de um procedimento computacional, o cálculo dessa combinação, e consequentemente da probabilidade, é extremamente complexo. Um exemplo disso foi um resultado obtido pelo matemático escocês <a href="https://pt.wikipedia.org/wiki/James_Stirling_(matem%C3%A1tico)">James Stirling</a> na sua obra <em>Methodus Differentialis</em> de 1719 para a aproximação do número fatorial <span class="math inline">\({\displaystyle n!}\)</span> para a quantidade <span class="math inline">\(\displaystyle \sqrt{2\pi n} \left(\frac{n}{e}\right)^n\)</span>. Tal aproximação recebe o nome de <a href="https://pt.wikipedia.org/wiki/F%C3%B3rmula_de_Stirling">Fórumula de Stirling</a>, representada por</p>
+<p><span class="math display">\[
+n! \ \sim \ \sqrt{2\pi n} \ \left(\frac{n}{e}\right)^n.
+\]</span> Observa-se que a equação acima nos diz que essas quantidades são <strong>assintoticamente equivalentes</strong>.</p>
+<p>Neste contexto, o resultado de De Moivre que faz a <strong>aproximação da distribuição binomial pela distribuição normal</strong>, foi essencial para cálculos de probabilidade em que a variável aleatória em estudo tivesse muitos valores observados.</p>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória que segue distribuição binomial com parâmetros <span class="math inline">\(n\)</span> e <span class="math inline">\(p\)</span>. Então, o valor esperado de <span class="math inline">\(X\)</span> é dado por</p>
+<p><span class="math display">\[
+\mbox{E}(X) = n \ p \qquad \text{e} \qquad \mbox{Var}(X) = n \ p \ (1-p)  
+\]</span></p>
+<p>A aproximação da distribuição binomial pela distribuição normal é realizada calculando-se os parâmetros que descrevem uma variável aleatória, isto é <span class="math inline">\(\mbox{E}(X)\)</span> e <span class="math inline">\(\mbox{Var}(X)\)</span>.</p>
+<p>Por exemplo, vamos considerar uma variável aleatória binomial com $n = 10 $ e <span class="math inline">\(p = 0.5\)</span>. Observa-se que para esses valores de parâmetros, temos uma boa aproximação, isto é</p>
+<pre class="r"><code>library(ggplot2)
+library(grid)
+
+n = 10
+p = 0.5
+x  = seq(0,n,1)
+px = dbinom(x, n, p)
+dat = data.frame(x, px)
+# Aproximação
+media = n*p # media
+desvio = sqrt(n*p*(1-p)) # desvio padrao
+
+ggplot(dat, aes(x = x, y = px)) + 
+  geom_bar(stat = &quot;identity&quot;, col = &quot;lightblue&quot;, fill = &quot;lightblue&quot;) + 
+  geom_point(aes(x = x, y = px), colour = &quot;black&quot;, size = 4) +
+  scale_y_continuous(expand = c(0.01, 0)) + 
+  xlab(&quot;x&quot;) + 
+  ylab(&quot;Probabilidade&quot;) +
+  stat_function(aes(x=x),fun=dnorm,geom = &quot;line&quot;,size=1,col=&quot;red&quot;,args = c(mean = media, sd = desvio))
+# Warning: `mapping` is not used by stat_function()</code></pre>
+<p><img src="figures/normal10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Porém, considerando os valores <span class="math inline">\(n = 10\)</span> e <span class="math inline">\(p = 0.2\)</span> ou <span class="math inline">\(n = 10\)</span> e <span class="math inline">\(p = 0.8\)</span>, a aproximação para a distribuição normal não são boas, como pode-se observar nos próximos gráficos.</p>
+<pre class="r"><code>library(ggplot2)
+library(grid)
+
+n = 10
+p = 0.1
+x  = seq(0,n,1)
+px = dbinom(x, n, p)
+dat = data.frame(x, px)
+# Aproximação
+media = n*p # media
+desvio = sqrt(n*p*(1-p)) # desvio padrao
+
+ggplot(dat, aes(x = x, y = px)) + 
+  geom_bar(stat = &quot;identity&quot;, col = &quot;lightblue&quot;, fill = &quot;lightblue&quot;) + 
+  geom_point(aes(x = x, y = px), colour = &quot;black&quot;, size = 4) +
+  scale_y_continuous(expand = c(0.01, 0)) + 
+  xlab(&quot;x&quot;) + 
+  ylab(&quot;Probabilidade&quot;) +
+  stat_function(aes(x=x),fun=dnorm,geom = &quot;line&quot;,size=1,col=&quot;red&quot;,args = c(mean = media, sd = desvio))
+# Warning: `mapping` is not used by stat_function()</code></pre>
+<p><img src="figures/normal11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>library(ggplot2)
+library(grid)
+
+n = 10
+p = 0.8
+x  = seq(0,n,1)
+px = dbinom(x, n, p)
+dat = data.frame(x, px)
+# Aproximação
+media = n*p # media
+desvio = sqrt(n*p*(1-p)) # desvio padrao
+
+ggplot(dat, aes(x = x, y = px)) + 
+  geom_bar(stat = &quot;identity&quot;, col = &quot;lightblue&quot;, fill = &quot;lightblue&quot;) + 
+  geom_point(aes(x = x, y = px), colour = &quot;black&quot;, size = 4) +
+  scale_y_continuous(expand = c(0.01, 0)) + 
+  xlab(&quot;x&quot;) + 
+  ylab(&quot;Probabilidade&quot;) +
+  stat_function(aes(x=x),fun=dnorm,geom = &quot;line&quot;,size=1,col=&quot;red&quot;,args = c(mean = media, sd = desvio))
+# Warning: `mapping` is not used by stat_function()</code></pre>
+<p><img src="figures/normal12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><strong>Pergunta:</strong> Para quais valores de <span class="math inline">\(n\)</span> e <span class="math inline">\(p\)</span> pode-se obter uma boa aproximação para a distribuição normal?</p>
+<p>De uma maneira geral, pode-se observar que uma combinação dos valores dos parâmetros <span class="math inline">\(n\)</span> e <span class="math inline">\(p\)</span> da distribuição binomial é que pode levar boas aproximações para a distribuição normal. Assim, o critério para uma boa aproximação nesse caso é representado por</p>
+<p><span class="math display">\[
+n \ p \ \geq \ 5 \qquad \text{ou} \qquad n \ p \ (1-p) \ &gt; 5. 
+\]</span></p>
+<p>Então, se  <span class="math inline">\(X \sim \text{binomial}(n,p)\)</span>  então  <span class="math inline">\(E(X) = np\)</span>  e  <span class="math inline">\(Var(X) = np(1-p)\)</span>. Pode-se aproximar a distribuição binomial pela distribuição normal, utilizando-se <span class="math display">\[
+Y \sim \text{N}(\mu = np, \ \sigma^2 = np(1-p)),
+\]</span> quando  <span class="math inline">\(np \geq 5\)</span>  e  <span class="math inline">\(np(1-p) \geq 5\)</span>.</p>
+</div>
+<div id="exercício" class="section level2">
+<h2>Exercício</h2>
+<p>Estudo do Sindicato dos Bancários indica que cerca de <span class="math inline">\(30\%\)</span> dos funcionários de banco têm problemas de estresse, provenientes das condições de trabalho. Numa amostra de <span class="math inline">\(200\)</span> bancários, qual é a probabilidade de que pelo menos <span class="math inline">\(50\)</span> estão com essa doença?</p>
+<p>Porém, como <span class="math inline">\(E(X) = np = 60\)</span> e <span class="math inline">\(Var(X) = np(1-p) = 42\)</span>, então podemos aproximar a binomial pela normal, isto é, podemos considerar <span class="math inline">\(Y \sim \text{N}(60, 42)\)</span>, de modo que</p>
+<p><span class="math display">\[
+\begin{align*}
+P(X \geq 50) \approx P(Y \geq 50-0.5) &amp;= P\left(\frac{Y-\mu}{\sigma} \geq
+\frac{49.5-60}{\sqrt{42}}\right) = P(Z \geq -1.62) = 0.9474
+\end{align*}
+\]</span></p>
+<ul>
+<li><strong>Observação:</strong> o valor <span class="math inline">\(-0.5\)</span> é o fator de <strong>correção de continuidade</strong> utilizado para calcular probabilidades de distribuições discretas por meio de distribuições contínuas.</li>
+</ul>
+<p>Usando o R:</p>
+
+<pre class="r"><code>## Cálculo exato pela distribuição binomial
+pbinom(49, size = 200, prob = 0.3, lower.tail = FALSE)
+# [1] 0.9494082
+## Aproximação pela Normal
+pnorm(50-0.5, mean = 60, sd = sqrt(42), lower.tail = FALSE)
+# [1] 0.9474037</code></pre>
+<p>Aproximação de <span class="math inline">\(X \sim \text{binomial}(200, 0.3)\)</span> utilizando uma <span class="math inline">\(Y \sim \text{N}(60, 42)\)</span>.</p>
+<pre class="r"><code>x &lt;- 0:200
+px &lt;- dbinom(x, size = 200, prob = 0.3)
+plot(x, px, type = &quot;h&quot;, xlab = &quot;x&quot;, ylab = &quot;Função Densidade&quot;)
+fx &lt;- dnorm(x, mean = 60, sd = sqrt(42))
+lines(x, fx, col = 2)</code></pre>
+<p><img src="figures/normal13-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+
+<center>
+  <hr width="100%" size="3px">
+  <p> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR">
+      <img src="img/CC_by-nc-sa_80x15.png" alt="Licença Creative Commons 4.0"> </a>
+  </p>
+  <p> <font size="2"> Este conteúdo
+      está disponível por meio da Licença Creative Commons 4.0 </font>
+  </p>
+</center>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

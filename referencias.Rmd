@@ -1,0 +1,36 @@
+---
+title: "Referências Bibliográficas"
+bibliography: ref.bib
+output:
+  html_document:
+    number_sections: false
+---
+
+## Referências Básicas
+
+
+- [Magalhães, M.N.](http://www.ime.usp.br/~marcos) ;
+      [Lima, A.C.P](http://www.ime.usp.br/~acarlos).
+      [Noções de Probabilidade e Estatística](http://www.ime.usp.br/~noproest).
+      São Paulo: EDUSP, 2008 (6a edição).
+- Bussab, W.O. ; Moretin, P.A.
+      [Estatística Básica](https://www.saraiva.com.br/estatistica-basica-9-ed-2017-9748081/p).
+      São Paulo: Editora Saraiva, 2017 (9a edição).
+- Morettin, L.G.
+  [Estatística Básica: Probabilidade e Inferência](http://loja.pearson.com.br/estatistica-basica-probabilidade-e-inferencia-9788576053705/p).
+  São Paulo: Pearson, 2010.
+- Montgomery, D.C. ; Runger, G. C. [Estatística Aplicada e Probabilidade para Engenheiros](https://www.amazon.com.br/Estat%C3%ADstica-Aplicada-Probabilidade-Para-Engenheiros/dp/852163241X/ref=asc_df_852163241X/?tag=googleshopp00-20&linkCode=df0&hvadid=379707181411&hvpos=&hvnetw=g&hvrand=2998600755856430241&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1001637&hvtargid=pla-1002925178552&psc=1) Rio de Janeiro: ED. LTC, 2016. 463P
+  
+## Referências complementares
+
+- Dantas, C. [Probabilidade: um curso introdutório](http://www.edusp.com.br/detlivro.asp?id=41384).
+  São Paulo: EDUSP, 2008.
+
+
+## Referências *online*
+
+
+- [Kahn Academy](https://www.khanacademy.org/math/statistics-probability) - Vídeos sobre probabilidade e estatística.
+- [História da Probabilidade](https://en.wikipedia.org/wiki/History_of_probability)
+
+

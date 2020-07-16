@@ -1,0 +1,142 @@
+---
+title: "Distribuição de Probabilidade no R"
+header-includes:
+- \usepackage[brazil]{babel}
+- \usepackage[labelfont=bf]{caption}
+output:
+  pdf_document: default
+  html_document:
+    number_sections: no
+bibliography: ref.bib
+---
+
+
+```{r setup, include=FALSE}
+library(tufte)
+library(xtable)
+library(knitr, quietly = TRUE)
+opts_chunk$set(
+               cache = TRUE,
+               tidy = FALSE,
+               comment = "#",
+               collapse = TRUE,
+               fig.align = "center",
+               fig.path = "figures/",
+               cache.path = "cache/"
+           )
+```
+
+
+## Introdução
+
+
+O R inclui algumas operações com as distribuições de probabilidade. Pode-se observar que existe 4 operações básicas indicadas pela seguinte letras:
+
+- $d$ \ calcula a densidade de probabilidade $f(x)$ no ponto;
+
+- $p$ \ calcula a função de distribuição acumulada $F(x)$ no ponto;
+
+- $q$ \ calcula o quantil correspondente a uma dada probabilidade;
+
+- $r$ \ gera uma amostra aleatória da distribuição
+
+
+
+## Distribuição de Poisson no R
+
+Uma variável aleatória $X$ segue **distribuição de Poisson**, a partir de um processo de Poisson, se sua **função de probabilidade** é representada  por	
+		
+$$P(X=x)=\frac{e^{-\lambda}\,\lambda^{x}}{x!},\quad \quad \quad x=0,1,\ldots$$
+em que, o parâmetro $\lambda \geq 0$ representa a **taxa média de ocorrência**  por unidade de medida (tempo, por exemplo).
+
+
+**Exemplo 1**
+
+Nos últimos 30 dias foram registrados a quantidade de acidentes por dia em uma determinada cidade.
+Vamos construir a tabela de frequência para o número de acidentes. 
+
+Então, 
+
+
+
+```{r, echo=TRUE}
+acidente <- data.frame('acd'= c(9, 6, 9, 11, 10, 10, 6, 10, 9, 4, 8, 10,
+                                10, 7, 9, 11, 4, 6, 11, 8, 5, 3, 5, 9, 6))
+
+table(acidente$acd)
+```
+
+Utilizando o pacote **ggplot** podemos plotar o gráfico  **Frequência x Número de acidentes**, isto é
+
+```{r, echo=TRUE}
+require(ggplot2)
+```
+
+```{r poisson2, echo=TRUE}
+ggplot(acidente, aes(x = as.factor(acd), y=..count../sum(..count..),
+                     fill = as.factor(acd))) +
+  geom_bar(width=0.1) +
+  labs(title = "Acidentes por dia",
+     x = "Número de acidentes",
+     y = "Frequência",
+     fill='Número de acidentes')
+```
+
+Observa-se que não temos como afirmar qual será a quantidade máxima de acidentes que podem ocorrer em um único dia. Assim, a **distribuição de Poisson** é o modelo probabilístico para dados de contagem dentro de um intervalo de tempo.
+
+Calculando-se a média e o desvio-padrão do número de acidentes, temos:
+
+```{r, echo=TRUE}
+mean(acidente$acd)
+```
+
+```{r, echo=TRUE}
+sd(acidente$acd)
+```
+
+Observa-se que neste modelo, uma estimativa relacionada ao parâmetro $\lambda$ deve ser a média amostral. Então, pode-se utilizar $\lambda = 8$ como a taxa de ocorrência de acidentes diaria.
+
+**Questão:** Qual é a probabilidade de ocorrer 12 acidentes em um único dia ?
+
+
+```{r, echo=TRUE}
+dpois(x = 12,
+      lambda = 8)
+```
+
+```{r, echo=TRUE}
+acid_dia <- 0:20
+probs <- dpois(x = acid_dia,
+              lambda = 8)
+
+probs
+```
+
+Graficamente, temos
+
+```{r poisson3, echo=TRUE}
+plot(acid_dia, probs, 
+     xlab = "Número de acidentes por dia",
+     ylab = "Probabilidade",
+     type='h',   # Traça uma linha vertical
+     col='red',   # Cor da linha
+     lwd=4)      # Espessura da linha/ponto
+```
+
+## Exercício no R
+
+**Exemplo 2**
+
+Falhas ocorrem ao acaso ao longo do comprimento de um fio delgado de cobre. Suponha que o número de falhas segue uma distribuição de Poisson com uma méia $2,3$ falhas por milímetro. 
+
+a)\ Construa o gráfico da função de probabilidade da variável aleatória.
+
+Determine a probabilidade de :
+
+b)\ Existir exatamente 2 falhas em 1 mm de fio.
+
+c)\ Existir 10 falhas em 5 mm de fio.
+
+d)\ Existir pelo menos uma falha em 2 mm de fio.
+
+e)\ Ocorrer no máximo 2 falhas em 1 mm de fio.

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Distribuição de Poisson</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-38898840-7', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">STA060 - Probabilidade</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Roteiro</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Aulas
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Teoria da Probabilidade</li>
+    <li>
+      <a href="Introd_proba.html">Introdução à Probabilidade [html]</a>
+    </li>
+    <li>
+      <a href="calculo_proba.html">Definições de Probabilidades [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Variáveis Aleatórias</li>
+    <li>
+      <a href="variavel_aleatoria_discretas.html">Variáveis Aleatórias Discretas [html]</a>
+    </li>
+    <li>
+      <a href="variavel_aleatoria_continuas.html">Variáveis Aleatórias Contínuas [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Discretas</li>
+    <li>
+      <a href="distribuicao_binomial.html">Distribuição Binomial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson.html">Distribuição de Poisson [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Contínuas</li>
+    <li>
+      <a href="distribuicao_uniforme.html">Distribuição Uniforme [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_exponencial.html">Distribuição Exponencial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal.html">Distribuição Normal [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Distribuições de Probabilidade no R</li>
+    <li>
+      <a href="distribuicao_binomial_no_R.html">Distribuição Binomial no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson_no_R.html">Distribuição de Poisson no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal_no_R.html">Distribuição de Normal no R [html]</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="recursos.html">Software Estatístico R</a>
+</li>
+<li>
+  <a href="referencias.html">Referências Bibliogáficas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/rodrigopescim">
+    <span class="fa fa-github fa-lg"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Distribuição de Poisson</h1>
+
+</div>
+
+
+<div id="introdução" class="section level2">
+<h2>Introdução</h2>
+<p>Uma variável aleatória discreta que pode ser expressar <strong>a probabilidade de uma série de contagens de eventos ocorrer, de forma independente, num certo período de tempo</strong> segue o comportamento probabilístico da chamada <strong>distribuição de Poisson</strong>. Esse modelo de probabilidade foi proposto pelo matemático e físico francês <a href="https://pt.wikipedia.org/wiki/Sim%C3%A9on_Denis_Poisson">Siméon Denis Poisson</a> em 1838 no seu tratado sobre probabilidade em julgamentos sobre matérias criminais e civis.</p>
+<p>Em seu trabalho, Poisson considerava <strong><span class="math inline">\(N\)</span> variáveis aleatórias que contabilizavam o número de ocorrências de um certo fenômeno durante um intervalo de tempo de determinada duração</strong>. Muitas aplicações do modelo probabilístico de Poisson iniciaram-se em fenômenos físicos, como por exemplo, no estudo do <strong>número de impactos de asteróides maiores que um certo tamanho desde uma certa data de referência</strong>. Hoje em dia, esse modelo de probabilidade possui aplicações em praticamente todas as áreas da ciência em que o objetivo seja o estudo de dados de contagens.</p>
+<p>A caracterização do modelo de Poisson pode ser observado a partir da realização de um experimento nas nas seguintes condições:</p>
+<ol style="list-style-type: lower-roman">
+<li><p> As contagens (ocorrências) são independentes;</p></li>
+<li><p> As ocorrências são aleatórias;</p></li>
+<li><p> A variável aleatória <span class="math inline">\(X\)</span> é o número de contagens de um evento <strong>ao longo de algum intervalo</strong> (de tempo ou espaço).</p></li>
+</ol>
+<p>Portanto, <span class="math inline">\(X\)</span> poderá assumir os valores <span class="math inline">\(0,1,\ldots\)</span> (sem limite superior).</p>
+</div>
+<div id="distribuição-de-poisson" class="section level2">
+<h2>Distribuição de Poisson</h2>
+<p>Considere então agora que o fenômeno de interesse é observado em um intervalo <strong>contínuo</strong> (tempo, espaço,<span class="math inline">\(\ldots\)</span>), de tamanho <span class="math inline">\(t\)</span>. O número de eventos que ocorrem no intervalo fixo <span class="math inline">\([0,t)\)</span> é uma variável aleatória <span class="math inline">\(X\)</span> (“número de sucessos”). Pode-se, então, inicialmente tentar aproximar esses eventos à um <strong>ensaio de Bernoulli</strong>, criando <span class="math inline">\(n\)</span> <strong>subintervalos muito pequenos</strong>, de forma que este processo satisfaça as seguintes condições:</p>
+<ol style="list-style-type: lower-roman">
+<li><p> Em um período de tempo muito curto, somente 1 ou 0 eventos podem ocorrer (dois ou mais eventos são impossíveis);</p></li>
+<li><p> O <strong>valor esperado de sucessos</strong>,  <span class="math inline">\(\displaystyle np\)</span> , é <strong>constante</strong> para qualquer tamanho do intervalo. Vamos denotar essa constante de  <span class="math inline">\(\displaystyle \lambda = np\)</span>;</p></li>
+<li><p> Dessa forma, a probabilidade de sucesso de um evento será  <span class="math inline">\(\displaystyle p = \frac{\lambda}{n}\)</span>;</p></li>
+<li><p> Cada subintervalo é um <strong>ensaio de Bernoulli independente</strong>.</p></li>
+</ol>
+<p>Assim, um experimento que satisfaça as condições (i - iv) é chamado de <strong>processo de Poisson</strong>.</p>
+<p>Note que se as condições acima forem satisfeitas, e se <strong>aumentarmos o número de subintervalos (<span class="math inline">\(n\)</span>)</strong>, então <strong>a probabilidade  <span class="math inline">\(p\)</span>  deverá diminuir</strong> para que  <span class="math inline">\(\lambda = np\)</span>  permaneça <strong>constante</strong>.</p>
+<p>Dessa forma, estamos interessados em determinar a distribuição de probabilidade de uma variável aleatória <span class="math inline">\(X\)</span>, tal que <span class="math inline">\(\displaystyle X \sim \mbox{binomial}(n, p = \lambda/n)\)</span> no limite  <span class="math inline">\(\displaystyle n \rightarrow \infty\)</span>  e  <span class="math inline">\(\displaystyle p \rightarrow 0\)</span>, isto é,</p>
+<p><span class="math display">\[
+\begin{eqnarray}
+    P[X = x] &amp;=&amp; \ \lim_{n \rightarrow \infty} {n \choose x}\,p^{x}\,(1-p)^{n-x} \\\\
+            &amp;=&amp; \ \lim_{n \rightarrow \infty} \frac{n!}{x!\,(n-x)!}\,\left(\frac{\lambda}{n}\right)^{x}\,\left(1 - \frac{\lambda}{n}\right)^{n-x} \\\\
+            &amp;=&amp; \ \frac{e^{-\lambda}\,\lambda^x}{x!}
+        \end{eqnarray}
+\]</span></p>
+<p><strong>Definição:</strong></p>
+<p>Uma variável aleatória <span class="math inline">\(X\)</span> segue <strong>distribuição de Poisson</strong>, a partir de um processo de Poisson, se sua <strong>função de probabilidade</strong> for representada por</p>
+<p><span class="math display">\[
+\begin{eqnarray*}
+            P(X=x)=\frac{e^{-\lambda}\,\lambda^{x}}{x!},\quad \quad \quad x=0,1,\ldots
+\end{eqnarray*}
+\]</span> em que, o parâmetro <span class="math inline">\(\lambda &gt; 0\)</span> representa a <strong>taxa média de ocorrência</strong> das contagens por unidade de medida (tempo, por exemplo).</p>
+<p><strong>Exemplos:</strong></p>
+<ul>
+<li><p> <strong>Número de carros</strong> que passam por um cruzamento durante <strong>uma certa hora do dia</strong>;</p></li>
+<li><p> <strong>Número de defeitos por unidade (<span class="math inline">\(m\)</span>, <span class="math inline">\(m^2\)</span>, <span class="math inline">\(m^3\)</span>)</strong> por peça fabricada;</p></li>
+<li><p> <strong>Número de microorganismos</strong> em suspensão encontrados em uma <strong>solução aquosa</strong>;</p></li>
+<li><p> <strong>Número de mortes</strong> por ataque cardíaco <strong>por ano</strong>, em uma cidade;</p></li>
+<li><p> <strong>Número de animais</strong> de uma espécie rara, existentes em uma determinada <strong>área geográfica</strong>.</p></li>
+</ul>
+<p><strong>Esperança e Variância</strong>:  <span class="math inline">\(\mbox{E}(X) = \mbox{Var}(X) = \lambda\)</span></p>
+<p><strong>Notação:</strong>  <span class="math inline">\(X \sim \text{Poisson}\,(\lambda)\)</span>.</p>
+<pre class="r"><code>par(mfrow=c(2,2), mar=c(4,4,2,1), mgp=c(3,1,0), las=1)
+plot(0:30, dpois(x = 0:30, lambda = 1), type = &quot;h&quot;,
+xlab = &quot;X&quot;, ylab = &quot;P[X = x]&quot;, main = expression(lambda == 1),
+ylim = c(0,.4))
+plot(0:30, dpois(x = 0:30, lambda = 5), type = &quot;h&quot;,
+xlab = &quot;X&quot;, ylab = &quot;P[X = x]&quot;, main = expression(lambda == 5),
+ylim = c(0,.18))
+plot(0:30, dpois(x = 0:30, lambda = 10), type = &quot;h&quot;,
+xlab = &quot;X&quot;, ylab = &quot;P[X = x]&quot;, main = expression(lambda == 10),
+ylim = c(0,.13))
+plot(0:30, dpois(x = 0:30, lambda = 15), type = &quot;h&quot;,
+xlab = &quot;X&quot;, ylab = &quot;P[X = x]&quot;, main = expression(lambda == 15),
+ylim = c(0,.11))</code></pre>
+<p><img src="figures/poisson-1.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="exercícios" class="section level2">
+<h2>Exercícios</h2>
+<ol style="list-style-type: decimal">
+<li> O número de partículas gama emitidas por segundo, por certa substância radioativa é uma variável aleatória com média de 3 partículas/segundo. Se um instrumento registrador torna-se inoperante quando há mais do que quatro partículas por segundo, determine:</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li><p>Qual distribuição de probabilidade segue essa variável aleatória?</p></li>
+<li><p>Qual é a probabilidade de duas partículas gama serem emitidas por segundo?</p></li>
+<li><p>Qual é a probabilidade do instrumento registrador ficar inoperante em um dado segundo?</p></li>
+<li><p>Qual é o desvio-padrão dessa variável aleatória?</p></li>
+</ol>
+<p><strong>Solução</strong></p>
+<ol style="list-style-type: lower-alpha">
+<li>, Como  <span class="math inline">\(X\)</span>  é o número de partículas gama emitidas por segundo, então observa-se um processo de contagem, de forma independente, num intervalo de tempo com uma taxa <span class="math inline">\(\lambda = 3\)</span> partículas por segundo.</li>
+</ol>
+<p>Portanto, , <span class="math inline">\(X \sim \text{Poisson}\ (\lambda)\)</span>.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><span class="math display">\[P(X = 2) = \frac{e^{-\lambda}\,\lambda^x}{x!} = \frac{e^{-3} \ 3^2}{2!} = 0.2240\]</span></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><span class="math display">\[
+\begin{eqnarray*}
+            P(\text{inoperante}) &amp;=&amp; \ P(X &gt; 4) \ = \ 1 - P(X \leq 4) \\\\
+            &amp;=&amp; \  1 - [P(X = 0) + P(X = 1) + P(X = 2) + P(X = 3) + P(X = 4)] \\\\
+            &amp;=&amp; \ 1 - \ \left[\frac{e^{-3}\,3^{0}}{0!} \ + \ \frac{e^{-3}\,3^1}{1!} \ + \ \frac{e^{-3}\,3^2}{2!} \ + \ \frac{e^{-3}\,3^3}{3!} \ + \ \frac{e^{-3}\,3^4}{4!}\right] \\\\
+            &amp;=&amp; \ 1 - \ (0.0497 \ + \ 0.1493 \ + \ 0.2240 \ + \ 0.2240 \ + \ 0.1680) \\\\
+            &amp;=&amp; \ 0.1847
+\end{eqnarray*}
+\]</span></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Como <span class="math inline">\(X\)</span> segue distribuição de Poisson, então</li>
+</ol>
+<p><span class="math display">\[\sigma_{X} \ = \ \sqrt{\mbox{Var}(X)} \ = \ \sqrt{\lambda} \ = \ \sqrt{3} = 1.7320 \ \ \text{partículos\segundo}
+\]</span>.</p>
+<ol start="2" style="list-style-type: decimal">
+<li> Falhas ocorrem ao acaso ao longo do comprimento de um fio delgado de cobre. Suponha que o número de falhas segue uma distribuição de Poisson com uma média de <span class="math inline">\(2,3\)</span> falhas por milímetro. Determine a probabilidade de:</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li><p>Existir exatamente 2 falhas em 1 mm de fio.</p></li>
+<li><p>Existir 10 falhas em 5 mm de fio.</p></li>
+<li><p>Existir pelo menos uma falha em 2 mm de fio.</p></li>
+<li><p>Ocorrer no máximo 2 falhas em 1 mm de fio.</p></li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li> Contaminação é um problema na fabricação de discos ópticos de armazenagem. Neste sentido, um estudo tem por interesse investigar o número de partículas de contaminação que ocorrem em um disco óptico por <span class="math inline">\(cm^2\)</span> de superfície. Sabe-se que o número médio de partículas por <span class="math inline">\(cm^2\)</span> de superfície média é 0,1. A área do disco sob estudo é 100 <span class="math inline">\(cm^2\)</span>. Determine a probabilidade de que no mínimo três partículas ocorram na área do disco sob estudo.</li>
+</ol>
+</div>
+
+<center>
+  <hr width="100%" size="3px">
+  <p> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR">
+      <img src="img/CC_by-nc-sa_80x15.png" alt="Licença Creative Commons 4.0"> </a>
+  </p>
+  <p> <font size="2"> Este conteúdo
+      está disponível por meio da Licença Creative Commons 4.0 </font>
+  </p>
+</center>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

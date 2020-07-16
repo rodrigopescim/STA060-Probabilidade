@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Variáveis Aleatórias Contínuas</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-38898840-7', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">STA060 - Probabilidade</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Roteiro</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Aulas
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Teoria da Probabilidade</li>
+    <li>
+      <a href="Introd_proba.html">Introdução à Probabilidade [html]</a>
+    </li>
+    <li>
+      <a href="calculo_proba.html">Definições de Probabilidades [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Variáveis Aleatórias</li>
+    <li>
+      <a href="variavel_aleatoria_discretas.html">Variáveis Aleatórias Discretas [html]</a>
+    </li>
+    <li>
+      <a href="variavel_aleatoria_continuas.html">Variáveis Aleatórias Contínuas [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Discretas</li>
+    <li>
+      <a href="distribuicao_binomial.html">Distribuição Binomial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson.html">Distribuição de Poisson [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Contínuas</li>
+    <li>
+      <a href="distribuicao_uniforme.html">Distribuição Uniforme [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_exponencial.html">Distribuição Exponencial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal.html">Distribuição Normal [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Distribuições de Probabilidade no R</li>
+    <li>
+      <a href="distribuicao_binomial_no_R.html">Distribuição Binomial no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson_no_R.html">Distribuição de Poisson no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal_no_R.html">Distribuição de Normal no R [html]</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="recursos.html">Software Estatístico R</a>
+</li>
+<li>
+  <a href="referencias.html">Referências Bibliogáficas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/rodrigopescim">
+    <span class="fa fa-github fa-lg"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Variáveis Aleatórias Contínuas</h1>
+
+</div>
+
+
+<div id="introdução" class="section level2">
+<h2>Introdução</h2>
+<p>Uma <strong>variável aleatória</strong> é classificada como <strong>contínua</strong> se <strong>assume valores em qualquer intervalo dos números reais</strong>, ou seja, um conjunto de valores não-enumerável. Dessa forma, pode se observar que <strong>não é possível atribuir probabilidades para um ponto específico, apenas para intervalos da reta</strong>.</p>
+<p><strong>Exemplos:</strong></p>
+<ul>
+<li><p>Peso de animais;</p></li>
+<li><p>Tempo de falha de uma estrutura metálica;</p></li>
+<li><p>Resistência à compressão do concreto;</p></li>
+<li><p>Altura da maré em uma hora específica;</p></li>
+<li><p>Salinidade da água do mar;</p></li>
+<li><p>Retorno financeiro de um investimento.</p></li>
+</ul>
+<p>Neste sentido, a natureza dessas variáveis aleatórias nos mostra que não podemos atribuir probabilidades à valores específicos, pois há uma quantidade <strong>não enumerável</strong> (infinita) de valores num intervalo entre dois pontos. Consequentemente, atribui-se probabilidades à intervalos de valores, por meio de uma <strong>função de <span class="math inline">\(X\)</span></strong>. Portanto, <strong>as probabilidades são representadas por áreas</strong> sob a curva.</p>
+<p>Graficamente, temos</p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/densidade1.png&quot;)</code></pre>
+<p><img src="img/densidade1.png" width="65%" style="display: block; margin: auto;" /></p>
+<p>Observa-se que nem todos os <span class="math inline">\(k =11\)</span> intervalos (do histograma) estão sob a curva da função de <span class="math inline">\(X\)</span>. Além disso, alguns intervalos não representam a área sob a curva. Porém, aconteceria se dividissémos em <span class="math inline">\(k = 22\)</span> intervalos? Vamos ver por um outro exemplo gráfico.</p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/densidade2.png&quot;)</code></pre>
+<p><img src="img/densidade2.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Assim, fazendo-se <span class="math inline">\(k \rightarrow \infty\)</span> (ou <span class="math inline">\(n \rightarrow \infty\)</span>), teríamos que cada intervalo represente alguma área (ou probabilidade) sob à curva.</p>
+<p>Vamos avaliar essa ideia com um exemplo prático.</p>
+<p><strong>Exemplo 1:</strong></p>
+<p>Estudos anteriores revelam a existência de um grande lençol freático (ou de água) no subsolo de uma região. No entanto, sua profundidade ainda não foi determinada, sabendo-se apenas que o lençol pode estar situado em qualquer ponto entre 20 e 100 metros. Vamos supor que selecionamos, ao acaso, um ponto nessa região e dispomos de uma sonda que, ao fazer a perfuração, detecta a profundidade do reservatório de água.</p>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória contínua tal que</p>
+<p><span class="math display">\[ X: \text{Profundidade do lençol freático}\]</span></p>
+<p>A partir disso a ideia é propor um função para <span class="math inline">\(X\)</span> e calcular algumas probabilidades de interesse.</p>
+<p><strong>Observação 1:</strong> É razoável assumir que a sonda pode parar em qualquer ponto entre 20 e 100 metros, sem que tenhamos motivos para privilegiar essa ou aquela profundidade, ou seja, consideramos todos os pontos como equiprováveis.</p>
+<p><strong>Observação 2:</strong> Ao pensar em atribuir uma probabilidade para cada ponto, chegamos a uma dificuldade, como temos infinitos pontos e todos são equiprováveis, teríamos infinitas probabilidades o que causaria uma probabilidade total de valor infinito, e não 1 como deve ser.</p>
+<p>A solução, neste caso, é não considerar valores únicos no cálculo da probabilidade, e sim intervalos de valores. Assim, o espaço amostral correspondente é <span class="math inline">\([20,100]\)</span> e as profundidades são igualmente prováveis.</p>
+<p>Então,</p>
+<ul>
+<li><p>Suponha que dividimos o espaço amostral em 8 intervalos de comprimento 10.</p></li>
+<li><p>É razoável atribuir aos intervalos a probabilidade <span class="math inline">\(\frac{1}{8}\)</span>, correspondendo à relação entre o comprimento de cada um deles e o comprimento do espaço amostral.</p></li>
+</ul>
+<pre class="r"><code>knitr::include_graphics(&quot;img/densidade3.png&quot;)</code></pre>
+<p><img src="img/densidade3.png" width="85%" style="display: block; margin: auto;" /></p>
+<p>E se dividissémos o espaço amostral em 16 intervalos ?</p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/densidade4.png&quot;)</code></pre>
+<p><img src="img/densidade4.png" width="88%" style="display: block; margin: auto;" /></p>
+<p>Assim, aumentando cada vez mais o número de intervalos, diminuindo suas amplitudes, até, obtermos (teoricamente) infinitos intervalos e o seguinte histograma</p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/densidade5.png&quot;)</code></pre>
+<p><img src="img/densidade5.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Assim, <strong>a probabilidade</strong> de uma variável aleatória contínua é definida pela área sob à curva de uma <strong>função positiva</strong>, denominada <strong>função densidade de probabilidade</strong>. Observa-se que a função densidade <strong>não é uma probabilidade</strong>, mas uma função que auxilia na determinação de probabilidades.</p>
+<p>Então, para a variável aleatória contínua <span class="math inline">\(X\)</span> representando a profundidade do lençol freático, a função densidade é dada por</p>
+<p><span class="math display">\[
+f(x) =
+  \begin{cases}
+  \frac{1}{80} &amp; \quad \text{se } \quad 20 \leq x \leq 100 \\\\
+   0  &amp; \quad \text{caso contrário}
+  \end{cases}
+\]</span></p>
+</div>
+<div id="função-densidade" class="section level2">
+<h2>Função Densidade</h2>
+<p><strong>Definição 1.</strong></p>
+<p>Diz-se que <span class="math inline">\(X\)</span> é uma variável aleatória contínua, se existir uma função <span class="math inline">\(f\)</span> , denominada função densidade de probabilidade (fdp) de <span class="math inline">\(X\)</span> que satisfaça às seguintes condições:</p>
+<ol style="list-style-type: lower-roman">
+<li>É uma função não negativa</li>
+</ol>
+<p><span class="math display">\[f(x) \geq 0\]</span></p>
+<ol start="2" style="list-style-type: lower-roman">
+<li>A área total sob à curva deve ser igual a 1</li>
+</ol>
+<p><span class="math display">\[\int_{-\infty}^{+\infty} f(x) \, dx = 1\]</span></p>
+<p>Vamos considerar uma função densidade <span class="math inline">\(f\)</span> e que nosso interesse é calcular a probabilidade da variável aleatória <span class="math inline">\(X\)</span> observar valores num intervalo <span class="math inline">\([a,b]\)</span>.</p>
+<p><strong>Pergunta</strong>: Como calcular <span class="math inline">\(P[a \leq X \leq b]\)</span> ?</p>
+<p>Primeiramente, vamos analizar o gráfico da função <span class="math inline">\(f\)</span>, ou seja,</p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/densidade6.png&quot;)</code></pre>
+<p><img src="img/densidade6.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Assim, a <strong>funçãfo densidade probabilidade</strong> atribui probabilidades à intervalos de valores do tipo <span class="math inline">\([a,b]\)</span> e é calculada por</p>
+<p><span class="math display">\[  P[a \leq X \leq b] = \int_{a}^{b}f(x)\,dx.\]</span> <strong>Observações:</strong></p>
+<ol style="list-style-type: decimal">
+<li> Seja <span class="math inline">\(a \in X\)</span> um valor observado qualquer. Então, <span class="math inline">\(P[X = a] = 0\)</span>, e consequentemente</li>
+</ol>
+<p><span class="math display">\[P[a \leq X \leq b] = P[a \leq X &lt; b] = P[a &lt; X \leq b] = P[a &lt; X &lt; b]\]</span></p>
+<ol start="2" style="list-style-type: decimal">
+<li><p> Qualquer função <span class="math inline">\(f(\cdot)\)</span> que seja não negativa e cuja área total sob a curva seja igual à unidade caracterizará uma <strong>variável aleatória contínua</strong>.</p></li>
+<li><p> A função de distribuição acumulada (fda) para uma variável aleatória <span class="math inline">\(X\)</span> é definida por</p></li>
+</ol>
+<p><span class="math display">\[F(x) = P[X \leq x] = \int_{-\infty}^{x} \,f(t)\,dt,\]</span> em que <span class="math inline">\(f(t)\)</span> é uma fdp. Isto significa que <span class="math inline">\(F^{\prime}(x) = \frac{dF(x)}{dx} = f(x)\)</span>.</p>
+<p><strong>Exemplo 2</strong></p>
+<p>Seja <span class="math inline">\(f\)</span> uma função tal que</p>
+<p><span class="math display">\[
+f(x)=
+\begin{cases}
+\frac{3}{2} \, x^2, &amp; \text{se } -1 \leq x \leq 1 \\\\
+0,              &amp; \text{caso contrário}
+\end{cases}
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p> Verifique se essa função é uma função densidade.</p></li>
+<li><p> Calcule:</p>
+<p>b1.  <span class="math inline">\(P[X &gt; 0]\)</span></p>
+<p>b2.  <span class="math inline">\(P[X &gt; 1/2]\)</span></p>
+<p>b3.  <span class="math inline">\(P[-1/2 \leq X \leq 1/2]\)</span></p>
+<p>b4.  <span class="math inline">\(P[X &lt; -2]\)</span></p>
+<p>b5.  <span class="math inline">\(P[X &lt; 1/2]\)</span></p>
+<p>b6.  <span class="math inline">\(P[X &lt; 0 \,\, \cup \,\, X &gt; 1/2]\)</span></p></li>
+</ol>
+<p><strong>Solução a. :</strong></p>
+<p>Para verificar se a função <span class="math inline">\(f\)</span> é densidade probabilidade, precisamos observar duas condições. A primeira é que <span class="math inline">\(f\)</span> seja uma função não-negativa, isto é, <span class="math inline">\(f(x) \geq 0\)</span>.</p>
+<p>Observa-se que</p>
+<p><span class="math display">\[\text{Para} \,\,\, x \in [-1,1] \,\,\, \text{a imagem de f está contida em} \,\, \left[0,\frac{3}{2}\right]\]</span></p>
+<p>Logo, <span class="math inline">\(f(x) \geq 0\)</span>.</p>
+<p>A segunda condição é que a área sob à curva seja igual a 1, isto é,</p>
+<p><span class="math display">\[\int_{-1}^{1}f(x)\,dx = \frac{3}{2}\,\int_{-1}^{1}\,x^2\,dx = \frac{3}{2} \left.\frac{x^3}{3}\right|_{-1}^{1} = 1.\]</span></p>
+<p>Portanto, <span class="math inline">\(f\)</span> é função densidade probabilidade.</p>
+<p><strong>Solução b1. :</strong></p>
+<p><span class="math display">\[P[X &gt; 0] = \int_{0}^{1}f(x)\,dx = \frac{3}{2}\,\int_{0}^{1}\,x^2\,dx = \frac{3}{2} \left.\frac{x^3}{3}\right|_{0}^{1} = \frac{1}{2}.\]</span></p>
+</div>
+<div id="valor-esperado-e-variância" class="section level2">
+<h2>Valor Esperado e Variância</h2>
+<p>A esperança de uma variável aleatória contínua <span class="math inline">\(X\)</span> tem o mesmo sentido e interpretação da esperança de uma variável aleatória discreta, ou seja, é a <strong>média</strong> ou <strong>valor esperado</strong> de <span class="math inline">\(X\)</span>. Neste caso, a esperança <strong>é obtida por meio da integral do produto de <span class="math inline">\(x\)</span> com a função <span class="math inline">\(f(x)\)</span></strong>, no intervalo definido pelo domínio de <span class="math inline">\(f\)</span>.</p>
+<p>De uma maneira geral,</p>
+<p><span class="math display">\[\mu = \mbox{E}(X) = \int_{-\infty}^{+\infty}x \cdot f(x)\,dx.\]</span></p>
+<p>A variância de uma variável aleatória <span class="math inline">\(X\)</span>, como já vimos, <strong>fornece o grau de dispersão dos valores de uma variável aleatória em relação à sua média</strong> <span class="math inline">\(\mu\)</span>. A forma geral para o cálculo é representada por</p>
+<p><span class="math display">\[  \mbox{Var}(X) = \mbox{E}\,\{[X - \mbox{E}(X)]^{2}\} = \mbox{E}\,[(X - \mu)^{2}].\]</span> No entanto, uma foma mais fácil operacionalmente pode ser deduzida a partir da equação acima, ou seja</p>
+<p><span class="math display">\[\mbox{Var}(X)= \mbox{E}(X^{2}) - [\mbox{E}(X)]^{2},\]</span> em que</p>
+<p><span class="math display">\[ \mbox{E}(X^{2}) = \int_{-\infty}^{+\infty}x^{2}\cdot f(x)\,dx.\]</span> <strong>Exemplo 3</strong></p>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória contínua com função densidade dada por</p>
+<p><span class="math display">\[
+f(x)=
+\begin{cases}
+\frac{3}{2} \, x^2, &amp; \text{se } -1 \leq x \leq 1 \\\\
+0,              &amp; \text{caso contrário}
+\end{cases}
+\]</span></p>
+<ul>
+<li>Determine a <span class="math inline">\(\mbox{E}(X)\)</span>, <span class="math inline">\(\mbox{Var}(X)\)</span> e o desvio-padrão <span class="math inline">\(\sigma_{X}\)</span> da variável aleatória <span class="math inline">\(X\)</span>.</li>
+</ul>
+<p><strong>Solução:</strong></p>
+<p>A esperança de <span class="math inline">\(X\)</span> é dada por</p>
+<p><span class="math display">\[\mu = \mbox{E}(X) = \int_{-1}^{1}x \cdot f(x)\,dx = \frac{3}{2}\,\int_{-1}^{1}\,x^3\,dx = \frac{3}{2} \left.\frac{x^4}{4}\right|_{-1}^{1} = \frac{3}{2} \left(\frac{1}{4} - \frac{1}{4}\right) = 0.\]</span></p>
+<p>Então, para o cálculo da variância de <span class="math inline">\(X\)</span>, temos</p>
+<p><span class="math display">\[\mbox{Var}(X) = \mbox{E}(X^2) = \int_{-1}^{1}x^2 \cdot f(x)\,dx = \frac{3}{2}\,\int_{-1}^{1}\,x^4\,dx = \frac{3}{2} \left.\frac{x^5}{5}\right|_{-1}^{1} = \frac{3}{2} \left[\frac{1}{5} - \left(-\frac{1}{5}\right)\right] = \frac{3}{5}.\]</span></p>
+<p>Portanto, o desvio-padrão de <span class="math inline">\(X\)</span> é dado por</p>
+<p><span class="math display">\[\sigma_{X} = \sqrt{\mbox{Var}(X)} = \sqrt{\frac{3}{5}} = 0.774\]</span></p>
+</div>
+<div id="exercícios" class="section level2">
+<h2>Exercícios</h2>
+<ol style="list-style-type: decimal">
+<li> A duração, em anos, de certa lâmpada especial é uma variável aleatória contínua com densidade dada por</li>
+</ol>
+<p><span class="math display">\[ f(x) = 2\,\rm{e}^{-2\,x} \quad \text{se} \quad x &gt; 0\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p> Qual é a probabilidade da lâmpada durar até 2 anos ?</p></li>
+<li><p> Qual é o valor esperado do tempo de duração (em anos) de uma certa lâmpada ?</p></li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li> A variável aleatória contínua <span class="math inline">\(X\)</span> tem função de distribuição acumulada (fda) dada por</li>
+</ol>
+<p><span class="math display">\[
+F(x)=
+\begin{cases}
+0, &amp; \text{se} \quad  x &lt; 1 \\\\
+\frac{1}{c}(1 - \rm{e}^{-(x-1)}), &amp; \text{se} \quad 1 \leq x &lt; 2 \\\\
+\frac{1}{c}(1 -\rm{e}^{-1} + \rm{e}^{2} - \rm{e}^{-2(x-1)}) , &amp; \text{se} \quad x \geq 2 
+\end{cases}
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p> Obtenha o valor de <span class="math inline">\(c\)</span>.</p></li>
+<li><p> Obtenha a correspondente função densidade da variável <span class="math inline">\(X\)</span>.</p></li>
+<li><p> Determine <span class="math inline">\(P(X \geq 3/2 | X &lt; 4)\)</span>.</p></li>
+</ol>
+</div>
+
+<center>
+  <hr width="100%" size="3px">
+  <p> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR">
+      <img src="img/CC_by-nc-sa_80x15.png" alt="Licença Creative Commons 4.0"> </a>
+  </p>
+  <p> <font size="2"> Este conteúdo
+      está disponível por meio da Licença Creative Commons 4.0 </font>
+  </p>
+</center>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+---
+title: "Distribuição de Probabilidade no R"
+output:
+  pdf_document: default
+  html_document:
+    number_sections: no
+bibliography: ref.bib
+---
+
+
+```{r setup, include=FALSE}
+library(tufte)
+library(xtable)
+library(knitr, quietly = TRUE)
+opts_chunk$set(
+               cache = TRUE,
+               tidy = FALSE,
+               comment = "#",
+               collapse = TRUE,
+               fig.align = "center",
+               fig.path = "figures/",
+               cache.path = "cache/"
+           )
+```
+
+
+## Introdução
+
+O R inclui algumas operações com as distribuições de probabilidade. Pode-se observar que existe 4 operações básicas indicadas pela seguinte letras:
+
+- $d$ \ calcula a densidade de probabilidade $f(x)$ no ponto;
+
+- $p$ \ calcula a função de distribuição acumulada $F(x)$ no ponto;
+
+- $q$ \ calcula o quantil correspondente a uma dada probabilidade;
+
+- $r$ \ gera uma amostra aleatória da distribuição
+
+
+## Distribuição Normal no R
+
+Diz-se que uma variável aleatória $X$ segue distribuição normal (ou Gaussiana) se sua função densidade é dada por 
+
+$$
+f(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left[-\frac{1}{2} \left( \frac{x -
+			\mu}{\sigma}\right)^2\right], \quad -\infty < x < \infty
+$$
+em que $\mu \in \mathbb{R}$ é o parâmetro que representa a média populacional e $\sigma > 0$ é o parâmetro que representa o desvio-padrão populacional.
+
+A funcionalidade para **distribuição normal** é implementada por argumentos que combinam as letras acima com o termo **norm**. Observa-se que por *default* as funções assumem a distribuição normal padrão, isto é, $N(\mu=0, \ \sigma^2=1)$.
+
+Vamos calcular as seguintes quantidades. 
+
+i)\ dnorm(-1); 
+
+```{r}
+dnorm(-1)
+```
+
+ii)\ pnorm(-1);
+
+```{r}
+pnorm(-1)
+```
+			
+iii)\ qnorm(0.975);
+
+```{r}
+qnorm(0.975)
+```
+			
+iv)\ rnorm(10)
+
+```{r}
+rnorm(10)
+```
+
+**Observações**
+
+\ 
+
+
+A função **dnorm(-1)** retorna o valor de $f(-1)$, isto é 
+
+\ 
+
+$$f(-1) = \frac{1}{\sqrt{2\pi}}\,\rm{e}^{-\frac{(-1)^2}{2}} = 0.2419707$$
+\ 
+
+A função **pnorm(-1)** calcula a probabilidade $P[Z \leq -1]$
+
+\ 
+
+
+O comando **qnorm(0.975)** calcula o valor de $a$ tal que $P[Z \leq a] = 0.975$
+
+\ 
+
+Observa-se que o comando  **rnorm(10)** gera uma amostra de 10 elementos da distribuição normal padrão.
+
+\ 
+
+A seguir, vamos ver os comandos para fazer gráficos de distribuições de probabilidade
+
+\
+
+
+Vamos estudar os gráficos das **funções densidade** e **distribuição acumulada** da normal padrão
+
+
+```{r normal 16}
+plot(dnorm, -3, 3) 
+```
+
+```{r normal 17}
+plot(pnorm, -3, 3)
+```
+
+## Exercício
+
+Seja $X$ uma v.a. com distribuição $N(100, 100)$. \ Calcular as probabilidades:
+
+\
+
+a)\  $P[X < 95]$	
+
+	
+b)\ $P[90 < X < 110]$
+
+	
+c)\ $P[X > 95]$
+
+
+

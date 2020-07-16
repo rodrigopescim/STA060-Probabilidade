@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Distribuição Uniforme</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-38898840-7', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">STA060 - Probabilidade</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Roteiro</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Aulas
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Teoria da Probabilidade</li>
+    <li>
+      <a href="Introd_proba.html">Introdução à Probabilidade [html]</a>
+    </li>
+    <li>
+      <a href="calculo_proba.html">Definições de Probabilidades [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Variáveis Aleatórias</li>
+    <li>
+      <a href="variavel_aleatoria_discretas.html">Variáveis Aleatórias Discretas [html]</a>
+    </li>
+    <li>
+      <a href="variavel_aleatoria_continuas.html">Variáveis Aleatórias Contínuas [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Discretas</li>
+    <li>
+      <a href="distribuicao_binomial.html">Distribuição Binomial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson.html">Distribuição de Poisson [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Contínuas</li>
+    <li>
+      <a href="distribuicao_uniforme.html">Distribuição Uniforme [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_exponencial.html">Distribuição Exponencial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal.html">Distribuição Normal [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Distribuições de Probabilidade no R</li>
+    <li>
+      <a href="distribuicao_binomial_no_R.html">Distribuição Binomial no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson_no_R.html">Distribuição de Poisson no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal_no_R.html">Distribuição de Normal no R [html]</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="recursos.html">Software Estatístico R</a>
+</li>
+<li>
+  <a href="referencias.html">Referências Bibliogáficas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/rodrigopescim">
+    <span class="fa fa-github fa-lg"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Distribuição Uniforme</h1>
+
+</div>
+
+
+<div id="introdução" class="section level2">
+<h2>Introdução</h2>
+<p>Uma variável aleatória contínua que segue <strong>um modelo probabilístico cuja a probabilidade de gerar qualquer outro ponto num intervalo não-enumerável</strong> contido no espaço amostral seja proporcional ao tamanho do intervao, é conhecido como <strong>modelo uniforme ou distribuição uniforme</strong>. Sua importância dentro da teoria da probabilidade, sob o ponto de vista teórico, está no fato da <strong>distribuição uniforme gerar qualquer outro modelo probabilístico</strong> via processo de simulação no intervalo <span class="math inline">\([0,1]\)</span>, admitindo-se que a função de distribuição acumulada é invertível.</p>
+</div>
+<div id="distribuição-uniforme" class="section level2">
+<h2>Distribuição Uniforme</h2>
+<p><strong>Definição</strong></p>
+<p>Uma variável aleatória <span class="math inline">\(X\)</span> tem distribuição uniforme (contínua) no intervalo <span class="math inline">\([a,b]\)</span>, <span class="math inline">\(a &lt; b\)</span>, se sua função densidade de probabilidade (fdp) é dada por</p>
+<p><span class="math display">\[
+f(x) =
+  \begin{cases}
+  \frac{1}{b-a} &amp; \quad \text{se } a \leq x \leq b \\\\
+   0  &amp; \quad \text{caso contrário}
+  \end{cases}
+\]</span> <strong>Esperança e Variância</strong>:  <span class="math inline">\(\mbox{E}(X) = \frac{a+b}{2} \quad \mbox{e} \quad \mbox{Var}(X) = \frac{(b-a)^2}{12}\)</span></p>
+<p><strong>Notação:</strong>  <span class="math inline">\(X \sim \text{U}\,[a,b]\)</span>.</p>
+<pre class="r"><code>par(mfrow=c(2,2), mar=c(3,4,2,1), mgp=c(2,0.5,0), las=1)
+plot(0:1, dunif(x = 0:1, min = 0, max = 1), type = &quot;l&quot;,
+     xlab = &quot;x&quot;, ylab = &quot;f(x)&quot;, main = &quot;a = 0, b = 1&quot;,
+     ylim = c(0,1), axes = TRUE)
+segments(0, 0, 0, 1, lty = 2)
+segments(1, 0, 1, 1, lty = 2)
+plot(-1:1, dunif(x = -1:1, min = -1, max = 1), type = &quot;l&quot;,
+     xlab = &quot;x&quot;, ylab = &quot;f(x)&quot;, main = &quot;a = -1, b = 1&quot;,
+     ylim = c(0,1), axes = TRUE)
+segments(-1, 0, -1, .5, lty = 2)
+segments(1, 0, 1, .5, lty = 2)
+plot(10:20, dunif(x = 10:20, min = 10, max = 20), type = &quot;l&quot;,
+     xlab = &quot;x&quot;, ylab = &quot;f(x)&quot;, main = &quot;a = 10, b = 20&quot;,
+     ylim = c(0,.2), axes = TRUE)
+segments(10, 0, 10, .1, lty = 2)
+segments(20, 0, 20, .1, lty = 2)
+plot(-10:10, dunif(x = -10:10, min = -10, max = 10), type = &quot;l&quot;,
+     xlab = &quot;x&quot;, ylab = &quot;f(x)&quot;, main = &quot;a = -10, b = 10&quot;,
+     ylim = c(0,.1), axes = TRUE)
+segments(-10, 0, -10, .05, lty = 2)
+segments(10, 0, 10, .05, lty = 2)</code></pre>
+<p><img src="figures/uniforme-1.png" width="99%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="exemplo" class="section level2">
+<h2>Exemplo</h2>
+<p>Com o objetivo de verificar a resistência à pressão de água, os técnicos de qualidade de uma empresa inspecionam os tubos de PVC produzidos. Os tudos inspecionados têm 6 metros de comprimento e são submetidos a grandes pressões até o aparecimento do primeiro vazamento, cuja distância a uma das extremidades (fixada à priori) é anotada para fins de análise. Seleciona-se um tubo ao acaso para ser inspecionado. Queremos calcular a probabilidade de que o vazamento esteja, a no máximo 1 metro das extremidades. Vamos denotar por <span class="math inline">\(X\)</span> a variável aleatória que indica a distância correspondente ao vazamento de maneira uniforme. Determine:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p> Qual é a distribuição de probabilidade de <span class="math inline">\(X\)</span>? Esboce o gráfico.</p></li>
+<li><p> Qual a probabilidade de que o vazamento esteja, no máximo, a um metro da extremidade de referência?</p></li>
+<li><p> Qual a probabilidade de que o vazamento esteja, no máximo, a um metro de qualquer uma das extremidades?</p></li>
+</ol>
+<p><strong>Solução</strong></p>
+<ol style="list-style-type: lower-alpha">
+<li> Como <span class="math inline">\(X =\)</span> “Distância correspondente ao vazamento”, então, temos que  <span class="math inline">\(X \sim \text{U}\,[0,6]\)</span>  e portanto, sua função densidade é dada por</li>
+</ol>
+<p><span class="math display">\[
+f(x) =
+  \begin{eqnarray*}
+  \frac{1}{6} &amp; \quad \text{se } 0 \leq x \leq 6 \\\\
+   0  &amp; \quad \text{caso contrário}
+  \end{eqnarray*}
+\]</span></p>
+<p>O gráfico da função densidade por <span class="math inline">\(X\)</span> é representado por</p>
+<pre class="r"><code>plot(0:6, dunif(x = 0:6, min = 0, max = 6), type = &quot;l&quot;,
+     xlab = &quot;x&quot;, ylab = &quot;f(x)&quot;, main = &quot;Distribuição Uniforme: U[0,6]&quot;,
+     ylim = c(0,0.3), axes = TRUE)
+segments(0, 0, 0, 1/6, lty = 2)
+segments(6, 0, 6, 1/6, lty = 2)</code></pre>
+<p><img src="figures/uniforme2-1.png" width="99%" style="display: block; margin: auto;" /></p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><span class="math display">\[
+P(X \leq 1) \ = \ P(0 \leq X \leq 1) \ = \ \int_{0}^{1} f(x) \ dx \ = \ \int_{0}^{1} \frac{1}{6} \ dx \ = \ \frac{1}{6}
+\]</span></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><span class="math display">\[
+\text{Prob}  = P(0 \leq X \leq 1) + P(5 \leq X \leq 6)\ = \ \int_{0}^{1} f(x) \ dx + \int_{5}^{6} f(x) \ dx \ = \ \frac{1}{6} + \frac{2}{6} \ = \ \frac{1}{3}
+\]</span></p>
+</div>
+<div id="exercícios" class="section level2">
+<h2>Exercícios</h2>
+<ol style="list-style-type: decimal">
+<li> Admite-se que uma pane pode ocorrer de maneira uniforme em qualquer ponto de uma rede elétrica de 10 km. A partir dessas informações, determine:</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li><p> Qual é a probabilidade de a pane ocorrer nos primeiros 500 metros? E de ocorrer nos 3 km centrais da rede?</p></li>
+<li><p>O custo de reparo da rede depende da distância do centro de serviço ao local da pane. Considere que o centro de serviço está na origem da rede e que o custo é de R$ 200 para distâncias até 3 km, de R$ 400 entre 3 e 8 km e de R$ 1000 para as distâncias acima de 8 km. Qual é o custo médio do conserto?</p></li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li>  O tempo necessário para um medicamento contra dor fazer efeito foi modelado de acordo com uma distribuição uniforme no intervalo de 5 a 15 minutos tendo por base experimentos conduzidos em animais. Um paciente, que esteja sofrendo dor, recebe o remédio e, supondo válido o modelo mencionado, qual a probabilidadeda dor:</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li><p>Cessar em até 10 minutos?</p></li>
+<li><p>Demorar pelo menos 12 minutos até cessar?</p></li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li> Suponha que o valor esperado de uma variável aleatória que segue distribuição uniforme seja 1 e sua variância é igual a 1/12. Encontre a probabilidade da variável assumir valores menores que 3/4.</li>
+</ol>
+</div>
+
+<center>
+  <hr width="100%" size="3px">
+  <p> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR">
+      <img src="img/CC_by-nc-sa_80x15.png" alt="Licença Creative Commons 4.0"> </a>
+  </p>
+  <p> <font size="2"> Este conteúdo
+      está disponível por meio da Licença Creative Commons 4.0 </font>
+  </p>
+</center>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

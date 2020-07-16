@@ -1,0 +1,39 @@
+---
+title: "Recursos Computacionais"
+bibliography: ref.bib
+output:
+  html_document:
+    number_sections: false
+---
+Nas últimas décadas do século XX houve um crescimento acelerado de várias áreas da estatística. Isso se deve ao fato do desenvolvimento de métodos estatísticos sofisticados, aliado ao aprimoramento dos computadores que podem armazenar e análisar grandes bancos de dados. Devido a este fato, é de extrema importância a utilização de software estatísticos, livres e gratuitos de preferência, para a computação e análises estatística de dados.
+
+
+
+
+## Software Estatístico R
+
+R é uma linguagem e um ambiente de desenvolvimento integrado, livre e gratuito de programação especializada em manipulação, análise e visualização gráfica de dados. Na atualidade é considerado o melhor ambiente computacional para essa finalidade. O ambiente estão disponível para diferentes sistemas operacionais: Unix/Linux, Mac e Windows.
+
+Foi criado originalmente por Ross Ihaka e por Robert Gentleman no Departamento de Estatística da Universidade de Auckland, Nova Zelândia. Posteriormente, o R é desenvolvido pelo esforço colaborativo de seus usuários em vários locais do mundo.
+
+## RStudio
+Quando o objetivo é inserir dados ou programar uma função, isso pode ser realizado de forma direta no R. Porém não será possível editá-las, e nem executá-las novamente. Neste sentido, uma alternativa é programar os códigos em um editor próprio para o software R. O Rstudio é um editor dinâmico, num ambiente integrado e de fácil utilização. Para mais detalhes sobre a instalação do software R e seu editor, ver os links abaixo.
+
+
+- [The R project for Statistical Computing](http://www.r-project.org): Página do programa **R**
+              
+- [R-Studio](http://www.rstudio.org) um ambiente dinâmico para facilitar o uso do R.
+              
+- [R-br](https://listas.inf.ufpr.br/cgi-bin/mailman/listinfo/r-br)
+        é a lista de discussão em portuguuês sobre o uso do R.
+        
+        
+Nas páginas dessa disciplina, pode-se observar botão escrito `Code` acima de algumas tabelas e gráficos. Ao clicar nesse botão, é revelado o código que foi utilizado para gerar aquele resultado, no software R.
+
+## Software para Matemática
+
+- [Wolfram alpha](http://www.wolframalpha.com)
+- [Matlab](https://www.mathworks.com/products/matlab.html) 
+- [Maple](https://www.maplesoft.com/MapleEducation/) 
+
+

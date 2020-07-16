@@ -1,0 +1,141 @@
+---
+title: "Distribuição Exponencial"
+output:
+  pdf_document: default
+  html_document:
+    number_sections: no
+bibliography: ref.bib
+---
+
+
+```{r setup, include=FALSE}
+library(tufte)
+library(xtable)
+library(knitr, quietly = TRUE)
+opts_chunk$set(
+               cache = TRUE,
+               tidy = FALSE,
+               comment = "#",
+               collapse = TRUE,
+               fig.align = "center",
+               fig.path = "figures/",
+               cache.path = "cache/"
+           )
+```
+
+## Introdução
+
+Considere uma situação em que a **contagem do número de ocorrências em um certo intervalo de tempo** é uma variável aleatória que segue **distribuição de Poisson**. Vamos supor que temos o interesse em verificar **o tempo transcorrido até a ocorrência do evento de interesse**, isto é, podemos pensar na probabilidade do tempo entre duas ocorrências consecutivas. Essa última **variável aleatória contínua** segue o comportamento probabilístico da chamada **distribuição exponencial**. 
+
+Neste sentido, o modelo exponencial é utilizado para descrever o tempo entre ocorrências de sucessivos eventos a partir de uma variável aleatória que segue o modelo Poisson. Isto significa que ambos os modelos probabilísticos estão a ssociados a um **processo estocástico**, chamado de **processo de Poisson**. 
+
+Em termos de aplicação, a distribuição exponencial tem sido utilizada extensivamente como um modelo para o tempo de vida de certos produtos e materiais, como por exemplo, no estudo do tempo de vida de óleos isolantes e dielétricos, entre outros.
+
+
+## Distribuição Exponencial
+
+Uma variável aleatória contínua $X$ ($x > 0$), segue a distribuição exponencial com parâmetro $\lambda > 0$ se sua função densidade probabilidade (fdp) é representada por
+
+$$
+f(x) =
+  \begin{cases}
+  \lambda \ e^{-\lambda \ x} & \quad \text{se } x \geq 0 \\\\
+   0  & \quad \text{caso contrário}
+  \end{cases}
+$$
+
+em que o parâmetro $\lambda > 0$ indica **a taxa de ocorrência por unidade de medida**, que pode ser tempo, distância ou volume, entre outros.
+
+A expressão da sua função de distribuição acumulada (fda) pode ser obtida por meio de integração e resulta em
+
+$$
+F(x) = 1 - \ e^{-\lambda \ x}
+$$
+
+A expressão da sua função de distribuição acumulada (fda) pode ser obtida por meio de integração e resulta em
+
+**Esperança e Variância**: \ $\displaystyle \mbox{E}(X) = \frac{1}{\lambda} \quad \mbox{e} \quad \mbox{Var}(X) = \frac{1}{\lambda^2}$
+
+**Notação:** \ $X \sim \text{exp}\ (\lambda)$.
+
+O gráfico da sua função densidade é representado por 
+
+```{r exp, fig.height=4, fig.width=7, out.width='99%'}
+par(mfrow=c(2,2), mar=c(3,4,2,1), mgp=c(2,0.5,0), las=1)
+plot(0:30, dexp(x = 0:30, rate = 0.2), type = "l",
+     xlab = "x", ylab = "f(x)", main = expression(lambda == 0.2),
+     ylim = c(0,.2), axes = TRUE)
+plot(0:30, dexp(x = 0:30, rate = 0.5), type = "l",
+     xlab = "x", ylab = "f(x)", main = expression(lambda == 0.5),
+     ylim = c(0,.5), axes = TRUE)
+plot(0:30, dexp(x = 0:30, rate = 1), type = "l",
+     xlab = "x", ylab = "f(x)", main = expression(lambda == 1),
+     ylim = c(0,1), axes = TRUE)
+plot(0:30, dexp(x = 0:30, rate = 2), type = "l",
+     xlab = "x", ylab = "f(x)", main = expression(lambda == 2),
+     ylim = c(0,2), axes = TRUE)
+```
+
+## Cálculo de Probabilidades
+
+A distribuição exponencial **possui um propriedade interessante para o cálculo de probabilidades**. Vamos considerar uma variável aleatória \ $X$ \ tal que \ $X \sim \text{exp}\ (\lambda)$. \ Aqui, temos o interesse em calcular a probabilidade do tempo até a ocorrência de um certo evento estar num intervalo $[a,b]$ dos reais positivos.
+
+Então, 
+
+$$
+P(a \leq X \leq b) = \int_{a}^{b} f(x) \ dx =  \ e^{-\lambda \ a} \ - \ e^{-\lambda \ b}
+$$
+
+
+## Exemplo
+
+Uma indústria fabrica lâmpadas especiais que ficam em operação continuamente. A empresa oferece a seus clientes a garantia de reposição, caso a lâmpada dure menos de 50 horas. A vida útil dessas lâmpadas é modelada por meio de distribuição exponencial com parâmetro $1/8000$.
+
+- Qual é a duração média das lâmpadas?
+
+- Determine a proporção de troca por defeito de fabricação.
+
+**Solução:**
+
+Observa-se que \ $X \sim \mbox{exp}(1/8000)$. 
+
+Então, a duração média das lâmpadas é dada por \ $\displaystyle \mbox{E}(X) = \frac{1}{\lambda} = 8000$h.
+
+- Proporção de troca por defeito:
+$$
+\begin{align*}
+P(X < 50) &= \int_{0}^{50} \lambda \ e^{-\lambda \ x} \, dx  & \\\\
+  &= \int_{0}^{50} \frac{1}{8000} e^{-\frac{1}{8000} x} \, dx &  \\\\
+  &= e^{-\frac{1}{8000} 0} - e^{-\frac{1}{8000} 50} &
+  \text{(usando a propriedade)}\\\\
+  &= 1 - 0.994 & \\\\
+  &= 0.006 &
+\end{align*}
+$$
+
+
+## Exercícios
+
+\ 
+
+1) \ Seja $X$ uma variável aleatória tal que $X \sim \mbox{exp} (1/60)$ que representa a expectativa de vida, em anos. A partir dessas informações, determine:
+
+
+a) \ Para um indivíduo selecionado ao acaso, a probabilidade de viver pelo menos até os 70 anos. 
+
+
+b) \ Para um indivíduo selecionado ao acaso, a probabilidade de morrer antes dos 70 anos, sabendo-se que o indivíduo acabou de completar 50 anos.
+
+
+c) \ Calcule o valor de $m$ tal que $P(X > m) = 1/2$.
+
+\ 
+
+2) \ Certo tipo de fusível tem duração de vida que segue uma distribuição exponencial com vida média de 100 horas. Cada fusível tem um custo de R\$ 10,00 e, se durar menos de 200 horas, existe um custo adicional de R\$8,00. Pergunta-se:
+
+
+a) \ Qual a probabilidade de um fusível durar mais de 150 horas? 
+
+
+
+b) \ Foi proposta a compra de uma outra marca que tem uma vida média de 200 horas e um custo de R\$ 15,00. Considerando também a incidência do custo adicional, deve ser feita a troca de marca?

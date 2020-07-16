@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Variáveis aleatórias Discretas</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-38898840-7', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">STA060 - Probabilidade</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Roteiro</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Aulas
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Teoria da Probabilidade</li>
+    <li>
+      <a href="Introd_proba.html">Introdução à Probabilidade [html]</a>
+    </li>
+    <li>
+      <a href="calculo_proba.html">Definições de Probabilidades [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Variáveis Aleatórias</li>
+    <li>
+      <a href="variavel_aleatoria_discretas.html">Variáveis Aleatórias Discretas [html]</a>
+    </li>
+    <li>
+      <a href="variavel_aleatoria_continuas.html">Variáveis Aleatórias Contínuas [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Discretas</li>
+    <li>
+      <a href="distribuicao_binomial.html">Distribuição Binomial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson.html">Distribuição de Poisson [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Contínuas</li>
+    <li>
+      <a href="distribuicao_uniforme.html">Distribuição Uniforme [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_exponencial.html">Distribuição Exponencial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal.html">Distribuição Normal [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Distribuições de Probabilidade no R</li>
+    <li>
+      <a href="distribuicao_binomial_no_R.html">Distribuição Binomial no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson_no_R.html">Distribuição de Poisson no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal_no_R.html">Distribuição de Normal no R [html]</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="recursos.html">Software Estatístico R</a>
+</li>
+<li>
+  <a href="referencias.html">Referências Bibliogáficas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/rodrigopescim">
+    <span class="fa fa-github fa-lg"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Variáveis aleatórias Discretas</h1>
+
+</div>
+
+
+<div id="introdução" class="section level2">
+<h2>Introdução</h2>
+<p>Em muitos experimentos é útil trabalhar com uma “variável resumo” do que com a estrutura toda de probabilidade original. Por exemplo, suponha que uma moeda honesta é lançada cinco vezes. Qual é o número de caras? Em geral, esta quantidade é o que tem sido chamada de <strong>variável aleatória</strong>. Intuitivamente, é uma <strong>variável</strong> pois seus valores variam e, é <strong>aleatória</strong> para enfatizar que o seu resultado é incerto, correto? Não! Do ponto de vista teórico, uma variável aleatória não é nem aleatória e nem uma variável.</p>
+<p><strong>Exemplo 1</strong></p>
+<p>Numa pesquisa de opinião, decidimos perguntar a 50 pessoas se elas concordam ou discordam sobre determinado assunto.</p>
+<ul>
+<li><p>1<span class="math inline">\(^{a}\)</span> Situação: A pessoa concorda <span class="math inline">\(= 1\)</span></p></li>
+<li><p>2<span class="math inline">\(^{a}\)</span> Situação: A pessoa discorda <span class="math inline">\(= 0\)</span></p></li>
+</ul>
+<p>Observa-se que o espaço amostral <span class="math inline">\((\Omega)\)</span> desse experimento contém <strong><span class="math inline">\(2^{50} = 1125899906842624\)</span></strong> elementos, que são todos os resultados possíveis que podem ocorrer quando as 50 pessoas são consultadas.</p>
+<p><strong>Pergunta:</strong> Seria interessante reduzir esse espaço para um de tamanho razoável? De que forma?</p>
+<p>Vamos definir uma variável e determinar o espaço amostral <span class="math inline">\(\Omega\)</span>.</p>
+<p><span class="math display">\[X:\mbox{&quot;Número de pessoas que concordam com a afirmação&quot;}.\]</span></p>
+<p>Qual a relação entre <span class="math inline">\(\Omega\)</span> e a variável <span class="math inline">\(X\)</span>?</p>
+<p><img src="img/variavel.png" width="85%" style="display: block; margin: auto;" /></p>
+<p>Observe que se contarmos em cada uma dessas <span class="math inline">\(2^{50}\)</span> sequências de tamanho 50 o número de pessoas que concordam, isto é, <span class="math inline">\(X=\{0,1,2,\ldots,50\}\)</span>, obtemos um espaço reduzido para esse problema.</p>
+<p>Isto significa que <strong>cada elemento do espaço amotral está associado a um único valor dos números reais</strong>, isto é quando definimos uma quantidade <span class="math inline">\(X\)</span>, estamos na verdade definindo uma <strong>função do espaço amostral</strong> original em um “novo” espaço amostral, usualmente um <strong>subconjunto dos <span class="math inline">\(\mathbb{R}\)</span></strong>.</p>
+</div>
+<div id="variável-aleatória" class="section level2">
+<h2>Variável Aleatória</h2>
+<p><strong>Definição 1.</strong> Seja um experimento <span class="math inline">\((\varepsilon)\)</span> associado a um espaço amostral <span class="math inline">\((\Omega)\)</span>. A função <span class="math inline">\(X\)</span> que associa cada elemento do espaço amostral, <span class="math inline">\(\omega \in \Omega\)</span>, a um número real, <span class="math inline">\(X(\omega)\)</span>, é chamada de <strong>variável aleatória</strong>.</p>
+<p>Matematicamente,</p>
+<p><span class="math display">\[X: \Omega \rightarrow \mathbb{R}\]</span></p>
+<p>No exemplo 1, temos</p>
+<p><span class="math display">\[\Omega = \{\omega_1 = (0,0,\ldots,0), \,\, \omega_2 = (1,0,\ldots,0), \,\, \omega_2 = (0,1,\ldots,0) \,\, , \ldots, \,\, \omega_{50} = (1,1,\ldots,1)\}\]</span></p>
+<p><span class="math display">\[\implies\]</span></p>
+<p><span class="math display">\[X(\omega_1) = 0, \,\, X(\omega_2) = 1, \,\, X(\omega_3) = 1 \,\, , \ldots, \,\, X(\omega_{50}) = 50\]</span></p>
+<p><span class="math display">\[\implies\]</span></p>
+<p><span class="math display">\[X = \{0, 1, \ldots, 50\}\]</span></p>
+<p><strong>Exemplo 2</strong></p>
+<p>Considere dois lançamentos de uma moeda honesta. Seja <span class="math inline">\(X\)</span> o número de “caras” que ocorreu nesses dois lançamentos. Vamos estudar a probabilidade de ocorrência dos valores observado de <span class="math inline">\(X\)</span>.</p>
+<p>Observa-se que</p>
+<p><img src="img/tab_var.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Observa-se que <span class="math inline">\(X\)</span> pode assumir os valores <span class="math inline">\(0\)</span>, <span class="math inline">\(1\)</span> e <span class="math inline">\(2\)</span>, isto é, <span class="math display">\[X=\{0,1,2\}\]</span>.</p>
+<p>Assumindo-se que os 4 eventos do espaço amostral <span class="math inline">\(\Omega\)</span> tem a mesma probabilidade <span class="math inline">\(\frac{1}{4}\)</span>, a probabilidade <span class="math inline">\(P\)</span> em <span class="math inline">\(X\)</span> é dada por</p>
+<p><img src="img/dist.png" width="40%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="tipos-de-variáveis-aleatórias" class="section level2">
+<h2>Tipos de Variáveis Aleatórias</h2>
+<p><strong>Definição 2.</strong> As variáveis aleatórias que assumem valores num conjunto enumerável (finito ou infinito) são denominadas <strong>discretas</strong> e aquelas que assumem valores num conjunto não-enumerável (intervalo da reta) são denominadas <strong>contínuas</strong>.</p>
+<p><strong>Exemplos:</strong></p>
+<ul>
+<li><p><strong>Variáveis Aleatórias Discretas:</strong></p>
+<ul>
+<li><p>Número de arranhões em uma superfície;</p></li>
+<li><p>Número de plantas doentes numa determinada área;</p></li>
+<li><p>Número de arranhões em uma superfície;</p></li>
+<li><p>Número de plantas doentes numa determinada área;</p></li>
+<li><p>Propoção de partes defeituosas entre 1000 testadas.</p></li>
+</ul></li>
+<li><p><strong>Variáveis Aleatórias Contínuas:</strong></p>
+<ul>
+<li><p>Intensidade de corrente elétrica;</p></li>
+<li><p>Tempo de vida de seres humanos;</p></li>
+<li><p>Altura, volume, temperatura, pressão, etc.</p></li>
+</ul></li>
+</ul>
+<p>Assim,</p>
+<p>Variáveis discretas <span class="math inline">\(\implies\)</span> Assumem valores em um conjunto enumerável (finito ou infinito).</p>
+<p>Variáveis contínuas <span class="math inline">\(\implies\)</span> Assumem valores em um conjunto não-enumerável.</p>
+</div>
+<div id="variável-aleatória-discreta" class="section level2">
+<h2>Variável Aleatória Discreta</h2>
+<p><strong>Definição 3.</strong> Seja <span class="math inline">\(X\)</span> uma variável aleatória. Se o número de valores observados de <span class="math inline">\(X\)</span> for finito ou infinito enumerável, denominaremos <span class="math inline">\(X\)</span> de <strong>variável aleatória discreta</strong>.</p>
+<p>Assim,</p>
+<p><span class="math display">\[X=\{x_{1},x_{2},\ldots,\}; \,\, x_{1} = X(\omega_{1}), \,\, x_{2} = X(\omega_{2}), \,\, \ldots \,\, \text{em que} \,\, \Omega = \{\omega_{1}, \omega_{2}, \ldots,\}.\]</span></p>
+<p>Observa-se que cada possível resultado <span class="math inline">\(x_{i} \in X\)</span> associa-se a uma função <span class="math inline">\(P(\cdot)\)</span> tal que</p>
+<p><span class="math display">\[p(x_{i}) = P(X = x_{i}),\,\,\mbox{para todo}\,\, i = 1,\ldots,n \]</span></p>
+<p>denominada de <strong>função (massa) de probabilidade</strong> (fp) de <span class="math inline">\(X\)</span>. Note que uma função é de probabilidade se satisfaz as seguintes condições:</p>
+<ol style="list-style-type: decimal">
+<li><p> <span class="math inline">\(P(X = x_{i}) \geq 0\)</span>;</p></li>
+<li><p> <span class="math inline">\(\displaystyle\sum_{i=1}^{n} P(X = x_{i}) = 1.\)</span></p></li>
+</ol>
+<div id="exercícios" class="section level3">
+<h3>Exercícios</h3>
+<ol style="list-style-type: decimal">
+<li> Em um processo de fabricação de semicondutores, três pastilhas de um lote são testadas. Cada pastilha é classificada como “aprovada” ou “falha”. Suponha que a probabilidade de uma pastilha ser aprovada no teste é <span class="math inline">\(0,8\)</span> e que as pastilhas sejam independentes. Seja a variável resposta <span class="math inline">\(X\)</span> o número de pastilhas de um lote que são aprovdas no teste. Determine a função de probabilidade de <span class="math inline">\(X\)</span>.</li>
+</ol>
+<p><strong>Solução</strong></p>
+<p><span class="math display">\[X: \text{Número de pastilhas de um lote que são aprovadas no teste}\]</span></p>
+<p>Vamos definir os eventos:</p>
+<p><span class="math display">\[A: \text{Pastilha é aprovada no teste} \implies P(A) = 0,8\]</span></p>
+<p><span class="math display">\[F: \text{Pastilha falha no teste} \implies P(F) = 0,2\]</span></p>
+<p>Vamos estudar os valores observados de <span class="math inline">\(X\)</span> e relacioná-los com os eventos do espaço amostral.</p>
+<p>Assim, temos</p>
+<p><img src="img/exercicio1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Observa-se que <span class="math inline">\(X = \{0, 1, 2, 3\}\)</span>. Como os eventos <span class="math inline">\(A\)</span> e <span class="math inline">\(F\)</span> não são equiprováveis, então as probabilidades dos respectivos eventos do espaço amostral não é <span class="math inline">\(\frac{1}{8}\)</span>.</p>
+<p>Logo, para determinar a função de probabilidade de <span class="math inline">\(X\)</span> basta calcular as probabilidades para cada valor observado.</p>
+<p>Então,</p>
+<p><span class="math display">\[P(X = 0) = P[(F,F,F)] = P(F \,\, \cap \,\, F \, \cap \,\, F) = P(F)\cdot P(F)\cdot P(F) = (0.2)^3 = 0.008\quad\quad\quad\quad\quad\quad\]</span></p>
+<p> </p>
+<p><span class="math display">\[P(X = 1) = P[(A,F,F) \, \cap \, (F,A,F) \, \cap \, (F,F,A)]  = 3 \,\, P(A)\cdot P(F)\cdot P(F) = 3\cdot(0.8)\cdot(0.2)^2 = 0.096\]</span></p>
+<p> </p>
+<p><span class="math display">\[P(X = 2) = P[(A,A,F) \, \cap \, (A,F,A) \, \cap \, (F,A,A)]  = 3 \,\, P(A)\cdot P(A)\cdot P(F) = 3\cdot(0.8)^2\cdot(0.2) = 0.384\]</span></p>
+<p><br />
+</p>
+<p><span class="math display">\[P(X = 3) = P[(A,A,A)] = P(A \,\, \cap \,\, A \, \cap \,\, A) = P(A)\cdot P(A)\cdot P(A) = (0.8)^3 = 0.512\quad\quad\quad\quad\quad\quad\]</span></p>
+<p>Portanto, a função (ou distribuição) de probabilidade de <span class="math inline">\(X\)</span> é dada por</p>
+<p><img src="img/fp.png" width="55%" style="display: block; margin: auto;" /></p>
+<p>O esboço do gráfico da função de probabilidade de <span class="math inline">\(X\)</span> é representado por</p>
+<pre class="r"><code>pastilhas = seq(0,3,1)
+prob_suc = 0.8
+npassa = data.frame(Pr = dbinom(pastilhas, 3, prob_suc))
+rownames(npassa) = 0:3
+cbind(npassa)
+#      Pr
+# 0 0.008
+# 1 0.096
+# 2 0.384
+# 3 0.512
+plot(pastilhas, dbinom(pastilhas, size=3, prob=prob_suc),
+xlab=&quot;Número de Pastilhas que são Aprovadas no Teste&quot;, ylab=&quot;Probabilidades&quot;,
+main=&#39;&#39;, axes=F, type=&quot;h&quot;, col=&#39;blue&#39;)
+points(pastilhas, dbinom(pastilhas, size=3, prob=prob_suc),
+pch=16, , col=&#39;blue&#39;)
+axis(1, pastilhas)
+axis(2, seq(0, 0.45, .05), las=1)
+abline(h=0, col=&quot;gray&quot;, cex=2.5, lwd=2)
+box(bty=&#39;l&#39;)</code></pre>
+<p><img src="figures/VAD-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol start="2" style="list-style-type: decimal">
+<li> O número de carros vendidos semanalmente num stand é uma variável aleatória <span class="math inline">\(X\)</span> com as seguintes probabilidades:</li>
+</ol>
+<p><img src="img/tab_exer.png" width="40%" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: lower-alpha">
+<li><p> Calcule o valor de <span class="math inline">\(k\)</span> para que <span class="math inline">\(P(X = x)\)</span> seja uma função de probabilidade.</p></li>
+<li><p> Determine a função de probabilidade de <span class="math inline">\(X\)</span> e esboce seu gráfico.</p></li>
+<li><p> Calcule a probabilidade do número de carros vendidos não chegar a 4, sabendo-se que este valor é superior a 1.</p></li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li> Suponha que uma produção diária de 850 peças fabricadas contenha 50 que não obedecem aos requerimentos do consumidor. Duas peças são selecionadas ao acaso, sem reposição, do lote. Seja <span class="math inline">\(X\)</span> a variável aleatória que representa o número de peças não-conformes na amostra. Esboce o gráfico da função de probabilidade de <span class="math inline">\(X\)</span>?</li>
+</ol>
+</div>
+</div>
+<div id="função-de-distribuição-acumulada" class="section level2">
+<h2>Função de Distribuição Acumulada</h2>
+<p>No exercício 1 estavamos interessados em encontrar a distribuição de probabilidades da variável aleatória <span class="math inline">\(X\)</span> (número de pastilhas de um lote que é aprovada no teste). Algumas vezes, podemos estar interessados em avaliar se <strong>no máximo duas pastilhas foram aprovadas (ou falharam) no teste</strong>. Isto significa calcular a probabilidade</p>
+<p><span class="math display">\[P(X \leq 2) = P(X = 0) + P(X = 1) + P(X = 2) = 0,488\]</span></p>
+<p><strong>Observação.</strong> Algumas vezes é útil descrever a distribuição de probabilidades de uma variável aleatória por meio de <strong>probabilidades cumulativas</strong>, isto é, <span class="math inline">\(P(X \leq x)\)</span>.</p>
+<p>Em geral, para qualquer variável aleatória com valores observados <span class="math inline">\(x_{1}, x_{2}, \ldots, x_{n}\)</span>, pode-se notar que os eventos <span class="math inline">\([X=x_{1}], [X=x_{2}], \ldots, [X=x_{n}]\)</span> são <strong>mutuamente exclusivos</strong>.</p>
+<p><strong>Definição 4.</strong> A função de distribuição acumulada (fda) de uma variável aleatória <span class="math inline">\(X\)</span>, denotada por <span class="math inline">\(F(x)\)</span>, é definida por</p>
+<p><span class="math display">\[F(x) = P(X \leq x) = \sum_{x_{i} \, \leq \, x} P(X = x_{i})\]</span></p>
+<p><strong>Propriedades:</strong></p>
+<p>P1.  <span class="math inline">\(0\leq F(x) \leq 1\)</span></p>
+<p>P2.  Se  <span class="math inline">\(x \leq y\)</span>  então  <span class="math inline">\(F(x) \leq F(y)\)</span>  (função não-decrescente)</p>
+<p><strong>Exemplo</strong></p>
+<p>Uma população de 1000 crianças foi analisada num estudo para determinar a efetividade de uma vacina contra um tipo de alergia. No estudo, as crianças recebiam uma dose da vacina e, após um mês, passavam por um novo teste. Caso ainda tivessem tido alguma reação alérgica, recebiam outra dose da vacina. Ao fim de 5 doses todas as crianças foram consideradas imunizadas. Os resultados estão na tabela a seguir.</p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/freq.png&quot;)</code></pre>
+<p><img src="img/freq.png" width="45%" style="display: block; margin: auto;" /></p>
+<p>Para uma criança selecionada ao acaso qual a probabilidade dela ter recebido 2 doses? E até 2 doses? Determine a função de distribuição acumulada do número de doses da vacina por um novo teste.</p>
+<p><strong>Solução</strong></p>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória que representa o número de doses de uma vacina. Então, a tabela de frequências e o gráfico das frequências acumuladas para <span class="math inline">\(X\)</span> são dados por</p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/exemplo2.png&quot;)</code></pre>
+<p><img src="img/exemplo2.png" width="120%" style="display: block; margin: auto;" /></p>
+<p>Assim,</p>
+<p><span class="math display">\[
+F(2) = P(X \leq 2) = P(X = 1) + P(X = 2) = 0,533.
+\]</span></p>
+<p>Observa-se que podemos escrever</p>
+<p><span class="math display">\[
+F(x) = P(X \leq x) = 0,533 \quad \text{para} \quad 2 \leq x &lt; 3.
+\]</span></p>
+<p>Assim, a função de distribuição de <span class="math inline">\(X\)</span> é representada por  <span class="math display">\[F(x) = \left\{
+  \begin{array}{lr}
+    0 &amp; \text{se } x &lt; 1 \\
+    0,245 &amp; \text{se } 1 \leq x &lt; 2 \\
+    0,533 &amp; \text{se } 2 \leq x &lt; 3 \\
+    0,789 &amp; \text{se } 3 \leq x &lt; 4 \\
+    0,934 &amp; \text{se } 4 \leq x &lt; 5 \\
+    1 &amp; \text{se } x \geq 5
+  \end{array}
+\right.
+\]</span></p>
+<div id="exercício" class="section level3">
+<h3>Exercício</h3>
+<p>Esboce o gráfico da função de distribuição acumulada do ex. 3</p>
+</div>
+</div>
+<div id="valor-esperado" class="section level2">
+<h2>Valor Esperado</h2>
+<p>O <strong>valor esperado</strong>, ou <strong>média</strong>, ou <strong>esperança matemática</strong> é uma quantidade utilizada como resumo do comportamento de uma variável aleatória. O valor esperado de uma vaeiável aleatória discreta <span class="math inline">\(X\)</span>, denotada por <span class="math inline">\(\text{E}(X)\)</span>, é obtida multiplicando-se cada valor observado <span class="math inline">\(x_i\)</span> por sua respectiva probabilidade <span class="math inline">\(P[X = x_i]\)</span>, e somando os produtos resultantes, isto é</p>
+<p><span class="math display">\[\text{E}(X) = \sum_{i} x_{i}\cdot P(X=x_{i})\]</span> Observa-se que a esperança é o valor médio que <strong>esperaríamos</strong> se o experimento aleatório continuasse sendo repetido muitas vezes.</p>
+<p><strong>Exemplo:</strong> Determine o valor esperado do número de solicitações de empréstimos aprovados por semana (X)</p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/exvaloresp.png&quot;)</code></pre>
+<p><img src="img/exvaloresp.png" width="30%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="variância" class="section level2">
+<h2>Variância</h2>
+<p>A variância de uma variável aleatória <span class="math inline">\(X\)</span>, representa <strong>o grau de dispersão dos valores de uma variável aleatória em relação à sua média</strong> <span class="math inline">\(\mbox{E}(X)\)</span>, isto é,</p>
+<p><span class="math display">\[\mbox{Var}(X) = \mbox{E}\left\{\left[X - \mbox{E}(X)\right]^{2}\right\}.\]</span></p>
+<p>No entanto, uma foma mais fácil operacionalmente pode ser deduzida a partir da equação acima, e assim, temos</p>
+<p><span class="math display">\[\mbox{Var}(X) = \mbox{E}(X^{2}) - \left[\mbox{E}(X)\right]^{2},\]</span> em que</p>
+<p><span class="math display">\[\mbox{E}(X^2) = \sum_{i} x^{2}_{i}\cdot P(X=x_{i}).\]</span> Assim, o desvio-padrão de uma variável aleatória <span class="math inline">\(X\)</span> é <span class="math inline">\(\text{DP}(X) = \sqrt{\text{Var}(X)}\)</span>.</p>
+<p><strong>Observações:</strong></p>
+<ul>
+<li><p>Observa-se que a esperança <span class="math inline">\(\mbox{E}(X)\)</span> e a variância <span class="math inline">\(\mbox{Var}(X)\)</span> tem importância na caracterização de diversas distribuições de probabilidade.</p></li>
+<li><p>Quando se conhece a <strong>esperança</strong> e a <strong>variância</strong> de um modelo de probabilidade, ele fica totalmente caracterizado, ou seja, sabemos seu formato geral.</p></li>
+<li><p>Voltando ao exemplo anterior, calcule a variância e o desvio-padrão para o número de solicitações de empréstimos aprovados por semana (<span class="math inline">\(X\)</span>).</p></li>
+</ul>
+</div>
+<div id="propriedades" class="section level2">
+<h2>Propriedades</h2>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória discreta e <span class="math inline">\(a, \, b , \, c \, \in \mathbb{R}\)</span> constantes.</p>
+<p>P1.  <span class="math inline">\(\mbox{E}(c) = c\)</span></p>
+<p>P2.  <span class="math inline">\(\mbox{E}(c\,X) = c\,\mbox{E}(X)\)</span></p>
+<p>P3.  <span class="math inline">\(\mbox{E}(a\,X + b) = a\,\mbox{E}(X) + b\)</span></p>
+<p>P4.  Sejam <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> variáveis aleatórias quaisquer. Então, <span class="math inline">\(\mbox{E}(X + Y) = \mbox{E}(X) + \mbox{E}(Y)\)</span></p>
+<p>A <strong>variância</strong> de uma variável aleatória discreta <span class="math inline">\(X\)</span> possui as seguintes propriedades:</p>
+<p>P1.  <span class="math inline">\(\mbox{Var}(0) = 0\)</span></p>
+<p>P2.  <span class="math inline">\(\mbox{Var}(a\,X) = a^{2}\,\mbox{Var}(X)\)</span></p>
+<p>P3.  <span class="math inline">\(\mbox{Var}(a) = 0\)</span></p>
+<p>P4.  Se <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> são independentes então $ (X + Y) = (X) + (Y)$</p>
+</div>
+<div id="exercícios-1" class="section level2">
+<h2>Exercícios</h2>
+<ol style="list-style-type: decimal">
+<li>  O número de mensagens enviadas por hora, através de uma rede de computadores, tem a seguinte distribuição:</li>
+</ol>
+<pre class="r"><code>knitr::include_graphics(&quot;img/exemplo4.png&quot;)</code></pre>
+<p><img src="img/exemplo4.png" width="75%" style="display: block; margin: auto;" /> Qual é o valor esperado e o desvio padrão do número de mensagens enviadas por hora?</p>
+<ol start="2" style="list-style-type: decimal">
+<li> A tabela abaixo apresenta as estimativas de retorno para dois investimentos (A e B), em R$ 1.000,00, sob três condições econômicas com diferentes probabilidades.</li>
+</ol>
+<pre class="r"><code>knitr::include_graphics(&quot;img/exemplo3.png&quot;)</code></pre>
+<p><img src="img/exemplo3.png" width="75%" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: lower-alpha">
+<li><p> Calcule a esperança para cada um dos investimentos, para verificar qual investimento maximiza o lucro.</p></li>
+<li><p> Calcule o desvio-padrão para cada um dos investimentos, para verificar qual investimento minimiza o risco.</p></li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li> Em uma bateria NiCd, uma célula completamente carregada é composta de hidróxido de níquel III. Níquel é um elemento químico que tem múltiplos estados de oxidação. Considere as seguintes proporções dos estados:</li>
+</ol>
+<pre class="r"><code>knitr::include_graphics(&quot;img/exemplo5.png&quot;)</code></pre>
+<p><img src="img/exemplo5.png" width="55%" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: lower-alpha">
+<li><p> Determine a função de distribuição acumulada de níquel e esboçe seu gráfico.</p></li>
+<li><p>  Determine o valor médio e a variância da carga de níquel.</p></li>
+</ol>
+<ol start="4" style="list-style-type: decimal">
+<li> Considere o seguinte jogo. Um indivíduo aposta em um dos números de 1 a 6. Três dados honestos são então lançados, de maneira independente, e, se o número apostado aparecer <span class="math inline">\(i\)</span> vezes, <span class="math inline">\(i = 1, 2, 3\)</span>; o apostador ganha <span class="math inline">\(i\)</span> reais; caso o número apostado não apareça em nenhum dos dados, o apostador perde 1 real. Seja X a variável aleatória que representa o ganho do apostador no jogo. Determine:</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li> Os valores observados de X.</li>
+<li> A função de probabilidade de X.</li>
+<li> A função de distribuição acumulada de X e esboce o seu gráfico.</li>
+<li> O ganho esperado do apostador.</li>
+<li> Com base no item (d), o jogo trará lucro ou prejuízo para o apostador.</li>
+</ol>
+</div>
+
+<center>
+  <hr width="100%" size="3px">
+  <p> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR">
+      <img src="img/CC_by-nc-sa_80x15.png" alt="Licença Creative Commons 4.0"> </a>
+  </p>
+  <p> <font size="2"> Este conteúdo
+      está disponível por meio da Licença Creative Commons 4.0 </font>
+  </p>
+</center>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

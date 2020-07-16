@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Introdução à Probabilidade</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-38898840-7', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">STA060 - Probabilidade</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Roteiro</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Aulas
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Teoria da Probabilidade</li>
+    <li>
+      <a href="Introd_proba.html">Introdução à Probabilidade [html]</a>
+    </li>
+    <li>
+      <a href="calculo_proba.html">Definições de Probabilidades [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Variáveis Aleatórias</li>
+    <li>
+      <a href="variavel_aleatoria_discretas.html">Variáveis Aleatórias Discretas [html]</a>
+    </li>
+    <li>
+      <a href="variavel_aleatoria_continuas.html">Variáveis Aleatórias Contínuas [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Discretas</li>
+    <li>
+      <a href="distribuicao_binomial.html">Distribuição Binomial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson.html">Distribuição de Poisson [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Principais Distribuições Contínuas</li>
+    <li>
+      <a href="distribuicao_uniforme.html">Distribuição Uniforme [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_exponencial.html">Distribuição Exponencial [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal.html">Distribuição Normal [html]</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Distribuições de Probabilidade no R</li>
+    <li>
+      <a href="distribuicao_binomial_no_R.html">Distribuição Binomial no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_poisson_no_R.html">Distribuição de Poisson no R [html]</a>
+    </li>
+    <li>
+      <a href="distribuicao_normal_no_R.html">Distribuição de Normal no R [html]</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="recursos.html">Software Estatístico R</a>
+</li>
+<li>
+  <a href="referencias.html">Referências Bibliogáficas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/rodrigopescim">
+    <span class="fa fa-github fa-lg"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Introdução à Probabilidade</h1>
+
+</div>
+
+
+<div id="introdução" class="section level2">
+<h2>Introdução</h2>
+<blockquote>
+<p>" A razão do número de todos os casos favoráveis à um acontecimento, para o de todos os casos possíveis é a probabilidade buscada, a qual é portanto uma fração …"</p>
+<p>“A teoria da probabilidade nada mais é do que o senso comum reduzido à cálculo.”</p>
+<footer>
+— Pierre Simon Laplace
+</footer>
+<footer>
+— Ensaio Filosófico Sobre as Probabilidades (1812)
+</footer>
+</blockquote>
+<p>A <strong>Teoria da Probabilidade</strong> é o ramo da matemática que desenvolve e pesquisa modelos (probabilísticos) que podem ser utilizados para quantificar e explicar os <strong>fenômenos aleatórios</strong>. A Inferência e os métodos estatísticos são totalmente fundamentados nessa teoria e portanto, torna-se essencial o seu estudo e compreensão. Os modelos probabilísticos utilizados para estudar um <strong>fenômeno aleatório</strong> podem variar em complexidade, mas todos eles possuem ingredientes básicos comuns.</p>
+</div>
+<div id="tipos-experimentos" class="section level2">
+<h2>Tipos Experimentos</h2>
+<div id="experimentos-determinísticos" class="section level3">
+<h3>Experimentos Determinísticos</h3>
+<p>Dizemos que um experimento é determinístico quando repetido inúmeras vezes, <strong>em condições semelhantes</strong>, conduz a resultados <em>essencialmente</em> idênticos. Ex.:</p>
+<ul>
+<li>Aceleração da gravidade;</li>
+<li>Leis da Física e da Química.</li>
+</ul>
+</div>
+<div id="experimentos-aleatório" class="section level3">
+<h3>Experimentos Aleatório</h3>
+<p>Um experimento aleatório (<span class="math inline">\(\varepsilon\)</span>) é aquele que repetido <strong>sob as mesmas condições</strong> pode levar a <strong>resultados diferentes</strong>, isto é, não se pode prever seu resultado. Por Ex:</p>
+<ul>
+<li>Lançamento de uma moeda não-vicida;</li>
+<li>Lançamento de um dado honesto;</li>
+<li>Tempo de falha de um equipamento eletrônico;</li>
+<li>Taxa de inflação do próximo mês.</li>
+</ul>
+<p>Exemplos:</p>
+<ul>
+<li><p><span class="math inline">\(\varepsilon_1\)</span>: Lançamento de uma moeda honesta;</p></li>
+<li><p><span class="math inline">\(\varepsilon_2\)</span>: Lançamento de um dado honesto;</p></li>
+<li><p><span class="math inline">\(\varepsilon_3\)</span>: Lançamento de duas moedas honestas;</p></li>
+<li><p><span class="math inline">\(\varepsilon_4\)</span>: Selecionar um morador da cidade de Londrina e medir sua altura;</p></li>
+<li><p><span class="math inline">\(\varepsilon_5\)</span>: Observar o tempo de falha de um componente mecânico;</p></li>
+<li><p><span class="math inline">\(\varepsilon_6\)</span>: Número peças defeituosas num processo de fabricação</p></li>
+</ul>
+</div>
+</div>
+<div id="espaço-amostral" class="section level2">
+<h2>Espaço Amostral</h2>
+<p>O espaço amostral é o <strong>conjunto de todos os resultados possíveis</strong> associados a um experimento (aleatório), repesentado por <span class="math inline">\(\Omega\)</span>. Sendo o espaço amostral um conjunto, ele poderá ser <strong>finito ou infinito</strong>.</p>
+<p>Dos exemplos anteriores dos experimentos aleatórios, temos:</p>
+<ul>
+<li><p><span class="math inline">\(\Omega_{1} = \{c, k\}\)</span>, em que <span class="math inline">\(c =\)</span> cara e <span class="math inline">\(k =\)</span> coroa</p></li>
+<li><p><span class="math inline">\(\Omega_{2} = \{1, 2, 3, 4, 5, 6\}\)</span>, em que <span class="math inline">\(i=1,\ldots,6\)</span> são as faces</p></li>
+<li><p><span class="math inline">\(\Omega_{3} = \{(c,c) , (c,k) , (k,c) , (k,k)\}\)</span></p></li>
+<li><p><span class="math inline">\(\Omega_{4} = \{ h \in \mathbb{R},\, h &gt; 0\}\)</span></p></li>
+<li><p><span class="math inline">\(\Omega_{5} = \{ t \in \mathbb{R},\, t &gt; 0\}\)</span></p></li>
+<li><p><span class="math inline">\(\Omega_{6} = \{0, 1, 2, 3, 4,\ldots\}\)</span></p></li>
+</ul>
+</div>
+<div id="evento" class="section level2">
+<h2>Evento</h2>
+<p>Um <strong>evento (aleatório)</strong> é um subconjunto de <span class="math inline">\(\Omega\)</span>, ou seja <strong>um conjunto de resultados</strong> de um experimento aleatório. Em geral, os eventos são representados por letras maiúsculas, como <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(C\)</span>, <span class="math inline">\(\ldots\)</span></p>
+<p>Dos exemplos anteriores dos experimentos aleatórios, temos:</p>
+<ul>
+<li><p><span class="math inline">\(A:\)</span> sair cara <span class="math inline">\(\Longrightarrow\)</span> <span class="math inline">\(A = \{c\}\)</span>;</p></li>
+<li><p><span class="math inline">\(B:\)</span> sair a face <span class="math inline">\(4\)</span> <span class="math inline">\(\Longrightarrow\)</span> <span class="math inline">\(B = \{4\}\)</span>;</p></li>
+<li><p><span class="math inline">\(C:\)</span> sair pelo menos uma cara <span class="math inline">\(\Longrightarrow\)</span> <span class="math inline">\(C = \{(c,c),(c,k),(k,c) \}\)</span>;</p></li>
+<li><p><span class="math inline">\(D = \{ h \in \mathbb{R},\, 0 \leq h \leq 1,70\,\mbox{m}\}\)</span>;</p></li>
+<li><p><span class="math inline">\(E = \{ t \in \mathbb{R},\, 0 \leq t \leq 5\,\mbox{anos}\}\)</span>;</p></li>
+<li><p><span class="math inline">\(F = \{0, 1, 2, 3\}\)</span></p></li>
+</ul>
+</div>
+<div id="operações-com-eventos" class="section level2">
+<h2>Operações com Eventos</h2>
+<p>Em muitos problemas de probabilidade interessam-nos eventos que podem ser expressos em termos de dois ou mais eventos, formando <strong>uniões, interseções e complementos</strong>. Os espaços amostrais e os eventos, especialmente as relações entre os eventos, costumam ser ilustrados por <strong>diagramas de Venn</strong>, que auxiliam na ``visualização’’ dos conceitos básicos de probabilidade.</p>
+<p>Observa-se que a <strong>Teoria dos conjuntos</strong> é utilizada para definir operações com eventos.</p>
+<div id="definições" class="section level3">
+<h3>Definições</h3>
+<ul>
+<li><p>O <strong>evento impossível</strong>, é o conjunto que não possue elementos, denotado por <span class="math inline">\(\emptyset\)</span>.</p></li>
+<li><p>O <strong>evento certo</strong>, denotado por <span class="math inline">\(\Omega\)</span>, é o próprio <strong>espaço amostral</strong>, isto é, <span class="math inline">\(A = \Omega\)</span>.</p></li>
+<li><p>O <strong>evento Elementar</strong> é aquele que <strong>contém apenas um dos elementos</strong> do espaço amostral.</p></li>
+<li><p>Dois eventos <span class="math inline">\(A\)</span> e <span class="math inline">\(B\)</span> são <strong>independentes</strong>, se a ocorrência de um deles <strong>não interfere</strong> na ocorrência do outro evento.</p></li>
+</ul>
+</div>
+<div id="união-de-eventos" class="section level3">
+<h3>União de eventos</h3>
+<ul>
+<li>o evento que consiste da <strong>união</strong> de todos os elementos dos eventos que a compõem é denotado por</li>
+</ul>
+<p><span class="math display">\[A \cup B = \{\omega \in \Omega:\, \omega \in A \quad \text{ou} \quad \omega \in B\}.\]</span></p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/uniao.png&quot;)</code></pre>
+<p><img src="img/uniao.png" width="35%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="intersecção-de-eventos" class="section level3">
+<h3>Intersecção de eventos</h3>
+<ul>
+<li>A <strong>intersecção</strong> entre dois eventos é <strong>formada pelos elementos em comuns</strong> dos dois eventos que a compõem, isto é</li>
+</ul>
+<p><span class="math display">\[A \cap B = \{\omega \in \Omega:\, \omega \in A \quad \text{e} \quad \omega \in B\}.\]</span></p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/interseccao.png&quot;)</code></pre>
+<p><img src="img/interseccao.png" width="35%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="eventos-disjuntos" class="section level3">
+<h3>Eventos disjuntos</h3>
+<ul>
+<li>Dois eventos <span class="math inline">\(A\)</span> e <span class="math inline">\(B\)</span> são <strong>mutuamente exclusivos</strong> se eles forem <strong>disjuntos</strong>, isto é, <span class="math inline">\(A \cap B = \emptyset\)</span>.
+<ul>
+<li>Exemplo: Lançamento de um dado honesto
+<ul>
+<li><span class="math inline">\(A:\)</span> sair o número <span class="math inline">\(2\)</span> <span class="math inline">\(\Longrightarrow\)</span> <span class="math inline">\(A = \{2\}\)</span></li>
+<li><span class="math inline">\(B:\)</span> sair o número ímpar <span class="math inline">\(\Longrightarrow\)</span> <span class="math inline">\(B = \{1,3,5\}\)</span></li>
+<li>Observa-se que os eventos <span class="math inline">\(A\)</span> e <span class="math inline">\(B\)</span> são <strong>mutuamente exclusivos</strong>, ou seja, <span class="math inline">\(A \cap B = \emptyset\)</span>.</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre class="r"><code>knitr::include_graphics(&quot;img/Disjuntos.png&quot;)</code></pre>
+<p><img src="img/Disjuntos.png" width="45%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="evento-complementar" class="section level3">
+<h3>Evento complementar</h3>
+<ul>
+<li>Seja <span class="math inline">\(A\)</span> um evento tal que <span class="math inline">\(A \subset \Omega\)</span>. O <strong>evento complementar</strong> de <span class="math inline">\(A\)</span> (<span class="math inline">\(A^{c}\)</span>) é o subconjunto de todos os elementos de <span class="math inline">\(\Omega\)</span> que <strong>não estão em <span class="math inline">\(A\)</span></strong>, isto é</li>
+</ul>
+<p><span class="math display">\[A^{c} = \{\omega: \omega \in \Omega \,\, \text{e} \,\, \omega \notin A \}\]</span></p>
+<pre class="r"><code>knitr::include_graphics(&quot;img/Comp.png&quot;)</code></pre>
+<p><img src="img/Comp.png" width="30%" style="display: block; margin: auto;" /></p>
+<p>Além disso,</p>
+<p><span class="math display">\[A \,\, \text{e} \,\, A^{c} \,\, \text{formam um partição de} \,\, \Omega \implies
+    \left\{
+    \begin{array}{l}
+    A \cup A^{c} = \Omega \\
+    A \cap A^{c} = \emptyset
+    \end{array}\right.\]</span></p>
+</div>
+</div>
+<div id="exercícios" class="section level2">
+<h2>Exercícios</h2>
+<ol style="list-style-type: decimal">
+<li><p>Defina um espaço amostral para cada um dos seguintes experimentos aleatórios:</p>
+<ol style="list-style-type: lower-alpha">
+<li>Uma pessoa concorda ou não com uma afirmação;</li>
+<li>Uma moeda honesta é lançada três vezes e observam-se as faces obtidas;</li>
+<li>Uma urna contém 10 bolas azuis e 10 vermelhas com dimensões rigorosamente iguais. Três bolas são selecionadas ao acaso com reposição e as cores anotadas;</li>
+<li>Lance um dado honesto até que a face 3 ocorra pela primeira vez.</li>
+</ol></li>
+<li><p>Considere o lançamento de um dado honesto e os eventos <span class="math inline">\(A = \{ 1, 2, 3, 4\}\)</span>, <span class="math inline">\(B = \{\omega: \omega \leq 3\}\)</span>, <span class="math inline">\(C = &quot;\text{face é par}&quot;\)</span>, <span class="math inline">\(D = &quot;\text{face é número primo}&quot;\)</span>. Determine:</p></li>
+</ol>
+<ul>
+<li><p>Uniões</p>
+<ul>
+<li>A <span class="math inline">\(\cup\)</span> B</li>
+<li>A <span class="math inline">\(\cup\)</span> C</li>
+<li>A <span class="math inline">\(\cup\)</span> D</li>
+</ul></li>
+<li><p>Intesecções</p>
+<ul>
+<li>A <span class="math inline">\(\cup\)</span> B</li>
+<li>A <span class="math inline">\(\cup\)</span> C</li>
+<li>A <span class="math inline">\(\cup\)</span> D</li>
+</ul></li>
+<li><p>Complementos</p>
+<ul>
+<li>A<span class="math inline">\(^{c}\)</span></li>
+<li>B<span class="math inline">\(^{c}\)</span></li>
+<li>D<span class="math inline">\(^{c}\)</span></li>
+</ul></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Sendo <span class="math inline">\(A\)</span> e <span class="math inline">\(B\)</span> dois eventos em um mesmo espaço amostral, “traduza” para a linguagem da Teoria dos Conjuntos as seguintes situações:</p>
+<ol style="list-style-type: lower-alpha">
+<li>Pelo menos um dos eventos ocorre;</li>
+<li>O evento A ocorre, mas B não;</li>
+<li>Nenhum deles ocorre.</li>
+</ol></li>
+</ol>
+</div>
+
+<center>
+  <hr width="100%" size="3px">
+  <p> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR">
+      <img src="img/CC_by-nc-sa_80x15.png" alt="Licença Creative Commons 4.0"> </a>
+  </p>
+  <p> <font size="2"> Este conteúdo
+      está disponível por meio da Licença Creative Commons 4.0 </font>
+  </p>
+</center>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+---
+title: "Especialização em Estatística - UEL"
+output:
+  word_document: default
+  html_document:
+    number_sections: no
+  pdf_document: default
+bibliography: ref.bib
+---
+
+```{r setup, include=FALSE}
+source("setup_knitr.R")
+```
+
+<!-- <div class="alert alert-danger" role="alert"> **Atenção!** Aqui é um -->
+<!-- espaço para avisos. Comente quando não utilizar. </div> -->
+
+\ 
+
+# STA060 - Probabilidade
+
+- **Disciplina:** Probabilidade
+- **Período:** 1$^{o}$ semestre de 2020
+- **Professor Responsável:** [Rodrigo Pescim][], ([Departamento de Estatística][] - CCE/UEL)
+
+\ 
+
+# Programa/objetivos da disciplina
+
+O objetivo desta disciplina é capacitar os alunos em conceitos introdutórios da teoria da probabilidade e seus modelos probabilísticos. Os principais tópicos abordados são:
+
+- Probabilidade e propriedades. Probabilidade condicional e independência.
+- Variáveis
+aleatórias discretas e principais modelos de distribuição discretas.
+- Variáveis aleatórias
+contínuas e principais modelos de distribuições contínuas.
+
+\ 
+
+## Referências Básicas
+
+
+- [Magalhães, M.N.](http://www.ime.usp.br/~marcos) ;
+      [Lima, A.C.P](http://www.ime.usp.br/~acarlos).
+      [Noções de Probabilidade e Estatística](http://www.ime.usp.br/~noproest).
+      São Paulo: EDUSP, 2008 (6a edição).
+- Bussab, W.O. ; Moretin, P.A.
+      [Estatística Básica](https://www.saraiva.com.br/estatistica-basica-9-ed-2017-9748081/p).
+      São Paulo: Editora Saraiva, 2017 (9a edição).
+- Morettin, L.G.
+  [Estaística Básica: Probabilidade e Inferência](http://loja.pearson.com.br/estatistica-basica-probabilidade-e-inferencia-9788576053705/p).
+  São Paulo: Pearson, 2010.
+- Montgomery, D.C. ; Runger, G. C. [Estatística Aplicada e Probabilidade para Engenheiros](https://www.amazon.com.br/Estat%C3%ADstica-Aplicada-Probabilidade-Para-Engenheiros/dp/852163241X/ref=asc_df_852163241X/?tag=googleshopp00-20&linkCode=df0&hvadid=379707181411&hvpos=&hvnetw=g&hvrand=2998600755856430241&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1001637&hvtargid=pla-1002925178552&psc=1) Rio de Janeiro: ED. LTC, 2016. 463P
+  
+\ 
+
+## Referências complementares
+
+- Dantas, C. [Probabilidade: um curso introdutório](http://www.edusp.com.br/detlivro.asp?id=41384).
+  São Paulo: EDUSP, 2008.
+
+\ 
+
+## Referências *online*
+
+
+- [Kahn Academy](http://www.khanacademy.org) vídeos sobre diversos
+      assuntos, incluindo sessões especificas de probabilidade e estatística.
+- [História da Probabilidade](https://pt.wikipedia.org/wiki/Hist%C3%B3ria_da_teoria_das_probabilidades). 
+
+
+<!-- links -->
+
+[Rodrigo Pescim]: https://rodrigopescim.github.io
+[Departamento de Estatística]: http://www.uel.br/cce/dsta/portal/
+
